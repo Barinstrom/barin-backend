@@ -37,6 +37,6 @@ app.get("/hello", (req, res) => {
   const { name } = req.query;
   res.json({ name: name });
 });
-app.listen(3000, () => {
+app.listen(process.env.PORT, () => {
   console.log("Start server at port 3000.");
 });
