@@ -3,7 +3,9 @@ const app = express();
 const mongoose = require("mongoose");
 const School = require("./models/school");
 const Product = require("./models/product");
-mongoose.connect("mongodb://localhost:27017/barin", {
+require('dotenv').config()
+
+mongoose.connect(process.env.DB_URI, {
   useNewUrlParser: true,
 });
 
