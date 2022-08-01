@@ -1,15 +1,36 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
+const passport = require("passport");
 const School = require("./models/school");
 const Product = require("./models/product");
-require('dotenv').config()
+const routes = require("./routes/routes");
+const authRoutes = require("./routes/secure_routes");
+const session = require('express-session');
+
+require("dotenv").config();
+require('./config/passport')(passport)
+
 
 mongoose.connect(process.env.DB_URI, {
   useNewUrlParser: true,
 });
 
+
 app.use(express.json());
+app.use(routes);
+app.use(session({ 
+  resave: false,
+  saveUninitialized: true,
+  secret: process.env.SECRET 
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(
+  "/auth",
+  passport.authenticate("jwt", { session: false }),
+  authRoutes
+);
 
 app.post("/products", async (req, res) => {
   const payload = req.body;
