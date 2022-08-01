@@ -4,7 +4,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const UserModel = require("../models/user");
 const bcryptUtils = require("../utils/bcrypt");
-const userService = require("../services/users")
+const userService = require("../services/users");
 const SALT_WORK_FACTOR = process.env.SALT_WORK_FACTOR;
 require("dotenv").config();
 
@@ -39,9 +39,8 @@ router.route("/login").post(async (req, res) => {
   const _user = await userService.getUserByUsername(userId);
 
   if (_user) {
-    if (bcryptUtils.comparePassword(password, _user.password)) {
+    if (bcrypt.compareSync(password, _user.password)) {
       const _userInfo = await userService.getUserWithoutPassword(_user._id);
-
       const token = jwt.sign(_userInfo, process.env.SECRET, {
         expiresIn: "1h",
       });
