@@ -3,7 +3,6 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const UserModel = require("../models/user");
-const bcryptUtils = require("../utils/bcrypt");
 const userService = require("../services/users");
 const SALT_WORK_FACTOR = process.env.SALT_WORK_FACTOR;
 require("dotenv").config();
@@ -48,6 +47,13 @@ router.route("/login").post(async (req, res) => {
       return res.json({ success: true, token: token });
     }
   }
+  else if (!userId || !password){
+    return res.json({
+      success: false,
+      message: "Please enter email and password",
+    });
+  }
+    
   return res.json({
     success: false,
     message: "Username or password is incorrect !",
