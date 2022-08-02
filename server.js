@@ -6,6 +6,7 @@ const School = require("./models/school");
 const Product = require("./models/product");
 const routes = require("./routes/routes");
 const authRoutes = require("./routes/secure_routes");
+const cors = require('cors');
 const session = require('express-session');
 
 require("dotenv").config();
@@ -19,6 +20,7 @@ mongoose.connect(process.env.DB_URI, {
 
 app.use(express.json());
 app.use(routes);
+app.use(cors())
 app.use(session({ 
   resave: false,
   saveUninitialized: true,
