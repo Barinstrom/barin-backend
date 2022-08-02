@@ -23,8 +23,10 @@ const validateLogin = (body) => {
 };
 
 router.route("/register").post(async (req, res) => {
-  validateRegister(req.body);
+  // validateRegister(req.body);
   const { userId, password, email, role } = req.body;
+  if (!userId,!password,!email,!role)
+    return res.json({ message: "Please enter all parameter."});
   const hashPassword = bcrypt.hashSync(password, SALT_WORK_FACTOR);
   const data = { userId, email, role, password: hashPassword };
   const user = new UserModel(data);
@@ -33,10 +35,9 @@ router.route("/register").post(async (req, res) => {
 });
 
 router.route("/login").post(async (req, res) => {
-  validateLogin(req.body);
+  // validateLogin(req.body);
   const { userId, password } = req.body;
   const _user = await userService.getUserByUsername(userId);
-
   if (_user) {
     if (bcrypt.compareSync(password, _user.password)) {
       const _userInfo = await userService.getUserWithoutPassword(_user._id);
