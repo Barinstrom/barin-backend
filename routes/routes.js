@@ -18,7 +18,7 @@ router.route("/register").post(async (req, res) => {
   if (!validator.isEmail(email))
     return res.status(400).send("Email format is not correct.");
 
-  const hashPassword = bcrypt.hashSync(password, SALT_WORK_FACTOR);
+  const hashPassword = bcrypt.hashSync(password, 10);
   const data = { userId, email, role, password: hashPassword };
   const user = new UserModel(data);
   const _user = await user.save();
