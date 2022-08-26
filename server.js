@@ -6,6 +6,7 @@ const School = require("./models/school");
 const Product = require("./models/product");
 const routes = require("./routes/routes");
 const authRoutes = require("./routes/secure_routes");
+const port = process.env.PORT || 54321
 const cors = require('cors');
 const session = require('express-session');
 
@@ -59,6 +60,6 @@ app.get("/hello", (req, res) => {
   const { name } = req.query;
   res.json({ name: name });
 });
-app.listen(process.env.PORT, () => {
-  console.log("Start server at port 3000.");
+app.listen(port, () => {
+  console.log(`Start server at port ${port}.`);
 });
