@@ -15,6 +15,9 @@ const userSchema = new Schema({
     type: String,
     required: [true, "role required !"],
   },
+  certificate_doc: {
+    type: String
+  },
   tel: String,
   email: {
     type: String,
@@ -28,6 +31,6 @@ const userSchema = new Schema({
   },
 });
 
-const userModel = mongoose.model("User", userSchema,"User");
+const userModel = mongoose.model("User", userSchema, "User");
 
 module.exports = userModel;
