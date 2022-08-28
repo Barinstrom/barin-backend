@@ -35,25 +35,6 @@ app.use(
   authRoutes
 );
 
-app.post("/products", async (req, res) => {
-  const payload = req.body;
-  const product = new Product(payload);
-  await product.save();
-  res.status(201).end();
-});
-
-app.post("/schools", async (req, res) => {
-  const payload = req.body;
-  const school = new School(payload);
-  await school.save();
-  res.status(201).end();
-});
-
-app.get("/products", async (req, res) => {
-  const products = await Product.find({});
-  res.json(products);
-});
-
 app.get("/", (req, res) => {
   res.send("Hello World");
 });
