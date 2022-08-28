@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
 
-const profile = require("./users/profile");
+//const profile = require("./users/profile");
+const schoolRoute = require('./schoolRoute');
 
-router.use("/profile", profile);
+// path => /auth/:school/:role/operation (เพราะมันเช็คง่ายกว่า)
+// ตอนทำจริงอาจไม่ต้องมี role ขั้นเพราะมีหลายๆ operation ที่ใช้ร่วมกันได้ (เปลี่ยนไม่ยาก)
+router.use("/:school",schoolRoute);
 
-router.route("").get((req, res) => {
-  return res.send("Welcome to authed routes");
-});
 
 module.exports = router;

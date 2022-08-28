@@ -14,13 +14,16 @@ require("dotenv").config();
 router.route("/register").post(async (req, res) => {
   const { userId, password,schoolID,schoolName, confirmPassword, email, role, certificate_doc } =
     req.body;
+    console.log(req.body);
   // ให้ front เป็น schoolID กับ name ด้วย 
   // schoolID จะเป็น path ที่ใช้ route ในหน้า front ซึ่งจะใช้กับ back ด้วยเพื่อความง่าย
 
   if (password != confirmPassword)
     return res.status(400).send("Password is not same.");
-  if ((!userId, !password, !email, !role,!schoolID,!schoolName))
+  if ((!userId, !password, !email, !role)){
+    console.log(userId, password, email, role);
     return res.status(400).send("Please enter all parameter.");
+  }
   if (!validator.isEmail(email))
     return res.status(400).send("Email format is not correct.");
 
