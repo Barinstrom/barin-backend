@@ -4,6 +4,7 @@ const bcrypt = require("bcryptjs");
 const validator = require("validator");
 const jwt = require("jsonwebtoken");
 const UserModel = require("../models/user");
+const SchoolModel = require('../models/school');
 const userService = require("../services/users");
 const { cloudinary } = require("../utils/cloudinary");
 
@@ -11,8 +12,10 @@ const SALT_WORK_FACTOR = process.env.SALT_WORK_FACTOR;
 require("dotenv").config();
 
 router.route("/register").post(async (req, res) => {
-  const { userId, password, confirmPassword, email, role, certificate_doc } =
+  const { userId, password,schoolID,schoolName, confirmPassword, email, role, certificate_doc } =
     req.body;
+  // ให้ front เป็น schoolID กับ name ด้วย 
+  // schoolID จะเป็น path ที่ใช้ route ในหน้า front ซึ่งจะใช้กับ back ด้วยเพื่อความง่าย
 
   if (password != confirmPassword)
     return res.status(400).send("Password is not same.");
@@ -27,14 +30,25 @@ router.route("/register").post(async (req, res) => {
     public_id: userId,
   });
   const url_doc = uploadedRes.secure_url;
-  const data = {
+  // ต้องสร้างโรงเรียนที่มาสมัครใน school_collection ก่อน แล้วค่อยเอา ID เป็น school ของ userdata
+  const schoolData = {
+    schoolID,
+    schoolName,
+    urlCertificate: url_doc,
+    paymentStatus: 0,
+    status: 0, // 0=pending -1=reject 1=approve
+    enteredData: new Date(),
+    // request , club , schedule urllog bgcolor => null at this point
+  }
+  const newSchool = new SchoolModel(schoolData);
+  const _newSchool = await newSchool.save();
+  const userData = {
     userId,
-    email,
-    role,
     password: hashPassword,
-    certificate_doc: url_doc,
+    role, // จริงๆน่าจะต้อง fixed ว่าเป็น admin นะ
+    school: schoolID,
   };
-  const user = new UserModel(data);
+  const user = new UserModel(userData);
   const _user = await user.save();
   return res.json({ success: true, data: _user });
 });
