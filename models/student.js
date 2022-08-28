@@ -5,7 +5,7 @@ const validator = require('validator')
 const StudentSchema = new Schema({
     _id: false,
     userID: {
-        type: mongoose.Types.ObjectId(),
+        type: mongoose.ObjectId,
         required: true,
         unique: true,
     },
@@ -41,13 +41,13 @@ const StudentSchema = new Schema({
         required: [true, "email required !"],
     },
     club: [{
-        clubID: mongoose.Types.ObjectId(),
+        clubID: mongoose.ObjectId,
         status: Number,
         studyYear: String,
     }],
-    reviews: [mongoose.Types.ObjectId()],
+    reviews: [mongoose.ObjectId],
     // request.find({ _id: { $in: followedIDs } }) to query request
-    requests: [mongoose.Types.ObjectId()],
+    requests: [mongoose.ObjectId],
 });
 
 module.exports = mongoose.model("Student",StudentSchema);

@@ -5,7 +5,7 @@ const validator = require('validator')
 const TeacherSchema = new Schema({
     _id: false,
     userID: {
-        type: mongoose.Types.ObjectId(),
+        type: mongoose.ObjectId,
         required: true,
         unique: true,
     },
@@ -28,7 +28,7 @@ const TeacherSchema = new Schema({
         },
         required: [true, "email required !"],
     },
-    clubs: [mongoose.Types.ObjectId()],
+    clubs: [mongoose.ObjectId],
 });
 
 module.exports = mongoose.model("Teacher",TeacherSchema);

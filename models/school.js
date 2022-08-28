@@ -28,8 +28,8 @@ const schoolSchema = new Schema({
     type: Date,
     require: true,
   },
-  requests: [mongoose.Types.ObjectId()],
-  clubs: [mongoose.Types.ObjectId()],
+  requests: [mongoose.ObjectId],
+  clubs: [mongoose.ObjectId],
   schedule: {
     registerDate: Date,
     endOfSchoolYear: Date,

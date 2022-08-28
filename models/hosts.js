@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const HostSchema = new Schema({
     _id: false,
     userID: {
-        type: mongoose.Types.ObjectId(),
+        type: mongoose.ObjectId,
         required: true,
         unique: true,
     },

@@ -23,7 +23,7 @@ const ClubSchema = new Schema({
     required: true,
   },
   schedule: [String],
-  reviews: [mongoose.Types.ObjectId()],
+  reviews: [mongoose.ObjectId],
   picture: {
     pictureID: Number,
     urlPicture: String,
