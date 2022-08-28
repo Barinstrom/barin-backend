@@ -19,7 +19,7 @@ router.route("/register").post(async (req, res) => {
 
   if (password != confirmPassword)
     return res.status(400).send("Password is not same.");
-  if ((!userId, !password, !email, !role))
+  if ((!userId, !password, !email, !role,!schoolID,!schoolName))
     return res.status(400).send("Please enter all parameter.");
   if (!validator.isEmail(email))
     return res.status(400).send("Email format is not correct.");
