@@ -4,7 +4,7 @@ const validator = require('validator')
 
 const TeacherSchema = new Schema({
     _id: false,
-    userID: {
+    _id: {
         type: mongoose.ObjectId,
         required: true,
         unique: true,

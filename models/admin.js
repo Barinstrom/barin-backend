@@ -4,7 +4,7 @@ const validator = require('validator')
 
 const AdminSchema = new Schema({
     _id: false,
-    userID: {
+    _id: {
         type: mongoose.ObjectId,
         required: true,
         unique: true,

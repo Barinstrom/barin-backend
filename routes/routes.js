@@ -5,6 +5,7 @@ const validator = require("validator");
 const jwt = require("jsonwebtoken");
 const UserModel = require("../models/user");
 const SchoolModel = require('../models/school');
+const AdminModel = require('../models/admin');
 const userService = require("../services/users");
 const { cloudinary } = require("../utils/cloudinary");
 
@@ -37,14 +38,17 @@ router.route("/register").post(async (req, res) => {
   const schoolData = {
     schoolID,
     schoolName,
-    urlCertificate: url_doc,
+    urlCertificateDocument: url_doc,
     paymentStatus: 0,
     status: 0, // 0=pending -1=reject 1=approve
     enteredData: new Date(),
     // request , club , schedule urllog bgcolor => null at this point
   }
+
+  // unique field ใน schema ไม่ใช่ validator ต้องเพิ่มเช็คว่าโรงเรียนซ้ำมั้ยด้วยตัวเอง
+  // ไว้ค่อยทำ
   const newSchool = new SchoolModel(schoolData);
-  const _newSchool = await newSchool.save();
+  newSchool.save();
   const userData = {
     userId,
     password: hashPassword,
@@ -53,6 +57,12 @@ router.route("/register").post(async (req, res) => {
   };
   const user = new UserModel(userData);
   const _user = await user.save();
+  const adminData = {
+    _id: _user._id,
+    email,
+  }
+  const admin = new AdminModel(adminData);
+  admin.save();
   return res.json({ success: true, data: _user });
 });
 

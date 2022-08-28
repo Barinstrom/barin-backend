@@ -9,9 +9,10 @@ const verifyToken = (req,res,next)=>{
         token,
         process.env.SECRET,
         (err,decode)=>{
-            if(err) return res.status(401).end();
+            if(err) return res.status(401).send(err);
             // decode => payload of jwt 
-            req.userInfo = decode.userInfo;
+            req.userInfo = decode;
+            //console.log(decode);
             next();
         }
     );
