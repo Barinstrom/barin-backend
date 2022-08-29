@@ -6,6 +6,7 @@ const jwt = require("jsonwebtoken");
 const UserModel = require("../models/user");
 const userService = require("../services/users");
 const { cloudinary } = require("../utils/cloudinary");
+const {sender} = require("../mail")
 
 const SALT_WORK_FACTOR = process.env.SALT_WORK_FACTOR;
 require("dotenv").config();
@@ -36,6 +37,7 @@ router.route("/register").post(async (req, res) => {
   };
   const user = new UserModel(data);
   const _user = await user.save();
+  sender(user.email, user.userId)
   return res.json({ success: true, data: _user });
 });
 
