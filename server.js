@@ -14,6 +14,8 @@ require("dotenv").config();
 require('./config/passport')(passport)
 
 
+app.use(express.json());
+
 mongoose.connect(process.env.DB_URI, {
   useNewUrlParser: true,
 });

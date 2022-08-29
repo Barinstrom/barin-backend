@@ -6,13 +6,13 @@ const jwt = require("jsonwebtoken");
 const UserModel = require("../models/user");
 const userService = require("../services/users");
 const { cloudinary } = require("../utils/cloudinary");
-const {sender} = require("../mail")
+const { sender } = require("../mail/mail.js");
 
 const SALT_WORK_FACTOR = process.env.SALT_WORK_FACTOR;
 require("dotenv").config();
 
 router.route("/register").post(async (req, res) => {
-  const { userId, password, confirmPassword, email, role, certificate_doc } =
+  const { userId, password, confirmPassword, email, role, certificate_doc, status, confirmationCode } =
     req.body;
 
   if (password != confirmPassword)
@@ -28,16 +28,33 @@ router.route("/register").post(async (req, res) => {
     public_id: userId,
   });
   const url_doc = uploadedRes.secure_url;
+
+  // const characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  // let token = '';
+  // for (let i = 0; i < 25; i++) {
+  //   token += characters[Math.floor(Math.random() * characters.length)];
+  // }
+  // console.log(token)
   const data = {
     userId,
     email,
     role,
     password: hashPassword,
     certificate_doc: url_doc,
+    // status: {
+    //   type: String,
+    //   enum: ['Pending', 'Active'],
+    //   default: 'Pending'
+    // },
+    // confirmationCode: {
+    //   type: String,
+    //   unique: true
+    // }
   };
+  
   const user = new UserModel(data);
   const _user = await user.save();
-  sender(user.email, user.userId)
+  // sender(data.email, data.userId, data.confirmationCode)
   return res.json({ success: true, data: _user });
 });
 
@@ -46,11 +63,18 @@ router.route("/login").post(async (req, res) => {
   const _user = await userService.getUserByUsername(userId);
   if (_user) {
     if (bcrypt.compareSync(password, _user.password)) {
-      const _userInfo = await userService.getUserWithoutPassword(_user._id);
-      const token = jwt.sign(_userInfo, process.env.SECRET, {
-        expiresIn: "1h",
-      });
-      return res.json({ success: true, token: token });
+      if (req.body.status != "Active") {
+        return res.status(401).send({
+          message: "Pending Account. Please Verify Your Email!",
+        });
+      }
+      else {
+        const _userInfo = await userService.getUserWithoutPassword(_user._id);
+        const token = jwt.sign(_userInfo, process.env.SECRET, {
+          expiresIn: "1h",
+        });
+        return res.json({ success: true, token: token });
+      }
     }
   } else if (!userId || !password) {
     return res.status(400).send("Please enter email and password.");
