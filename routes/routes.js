@@ -8,7 +8,8 @@ const SchoolModel = require('../models/school');
 const AdminModel = require('../models/admin');
 const userService = require("../services/users");
 const { cloudinary } = require("../utils/cloudinary");
-const { sender } = require("../mail/mail.js");
+const { sender } = require("../utils/mail");
+const verifyUser = require("../middleware/verifyUser")
 
 const SALT_WORK_FACTOR = process.env.SALT_WORK_FACTOR;
 require("dotenv").config();
@@ -78,5 +79,7 @@ router.route("/login").post(async (req, res) => {
   }
   return res.status(401).send("Email or password is not correct.");
 });
+
+router.get("/confirm/:confirmationCode",verifyUser)
 
 module.exports = router;

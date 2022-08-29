@@ -9,6 +9,7 @@ specifiers:
   express-session: ^1.17.3
   jsonwebtoken: ^8.5.1
   mongoose: ^6.5.0
+  nodemailer: ^6.7.8
   nodemon: ^2.0.19
   passport: ^0.6.0
   passport-jwt: ^4.0.0
@@ -23,6 +24,7 @@ dependencies:
   express-session: 1.17.3
   jsonwebtoken: 8.5.1
   mongoose: 6.5.3
+  nodemailer: 6.7.8
   passport: 0.6.0
   passport-jwt: 4.0.0
   validator: 13.7.0
@@ -888,6 +890,11 @@ packages:
     engines: {node: '>= 0.4.0'}
     dev: false
     optional: true
+
+  /nodemailer/6.7.8:
+    resolution: {integrity: sha512-2zaTFGqZixVmTxpJRCFC+Vk5eGRd/fYtvIR+dl5u9QXLTQWGIf48x/JXvo58g9sa0bU6To04XUv554Paykum3g==}
+    engines: {node: '>=6.0.0'}
+    dev: false
 
   /nodemon/2.0.19:
     resolution: {integrity: sha512-4pv1f2bMDj0Eeg/MhGqxrtveeQ5/G/UVe9iO6uTZzjnRluSA4PVWf8CW99LUPwGB3eNIA7zUFoP77YuI7hOc0A==}
