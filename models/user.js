@@ -29,15 +29,15 @@ const userSchema = new Schema({
     },
     required: [true, "email required !"],
   },    
-  // status: {
-  //   type: String,
-  //   enum: ['Pending', 'Active'],
-  //   default: 'Pending'
-  // },
-  // confirmationCode: {
-  //   type: String,
-  //   unique: true
-  // }
+  status: {
+    type: String,
+    enum: ['Pending', 'Active'],
+    default: 'Pending'
+  },
+  confirmationCode: {
+    type: String,
+    unique: true
+  }
 });
 
 const userModel = mongoose.model("User", userSchema, "User");

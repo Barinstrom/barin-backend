@@ -29,32 +29,25 @@ router.route("/register").post(async (req, res) => {
   });
   const url_doc = uploadedRes.secure_url;
 
-  // const characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  // let token = '';
-  // for (let i = 0; i < 25; i++) {
-  //   token += characters[Math.floor(Math.random() * characters.length)];
-  // }
-  // console.log(token)
+  const characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  let token = '';
+  for (let i = 0; i < 25; i++) {
+    token += characters[Math.floor(Math.random() * characters.length)];
+  }
+  console.log(token)
   const data = {
     userId,
     email,
     role,
     password: hashPassword,
     certificate_doc: url_doc,
-    // status: {
-    //   type: String,
-    //   enum: ['Pending', 'Active'],
-    //   default: 'Pending'
-    // },
-    // confirmationCode: {
-    //   type: String,
-    //   unique: true
-    // }
+    status: "Pending",
+    confirmationCode:token
   };
   
   const user = new UserModel(data);
   const _user = await user.save();
-  // sender(data.email, data.userId, data.confirmationCode)
+  sender(data.email, data.userId, data.confirmationCode)
   return res.json({ success: true, data: _user });
 });
 
