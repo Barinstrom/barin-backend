@@ -5,11 +5,14 @@ const validator = require("validator");
 const jwt = require("jsonwebtoken");
 const UserModel = require("../models/user");
 const userService = require("../services/users");
+const { cloudinary } = require("../utils/cloudinary");
+
 const SALT_WORK_FACTOR = process.env.SALT_WORK_FACTOR;
 require("dotenv").config();
 
 router.route("/register").post(async (req, res) => {
-  const { userId, password, confirmPassword, email, role } = req.body;
+  const { userId, password, confirmPassword, email, role, certificate_doc } =
+    req.body;
 
   if (password != confirmPassword)
     return res.status(400).send("Password is not same.");
@@ -19,7 +22,18 @@ router.route("/register").post(async (req, res) => {
     return res.status(400).send("Email format is not correct.");
 
   const hashPassword = bcrypt.hashSync(password, 10);
-  const data = { userId, email, role, password: hashPassword };
+  const uploadedRes = await cloudinary.uploader.upload(certificate_doc, {
+    upload_preset: "certificate_doc",
+    public_id: userId,
+  });
+  const url_doc = uploadedRes.secure_url;
+  const data = {
+    userId,
+    email,
+    role,
+    password: hashPassword,
+    certificate_doc: url_doc,
+  };
   const user = new UserModel(data);
   const _user = await user.save();
   return res.json({ success: true, data: _user });
