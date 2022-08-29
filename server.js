@@ -3,7 +3,6 @@ const app = express();
 const mongoose = require("mongoose");
 const passport = require("passport");
 const School = require("./models/school");
-const Product = require("./models/product");
 const routes = require("./routes/routes");
 const authRoutes = require("./routes/secure_routes");
 const port = process.env.PORT || 54321
@@ -35,11 +34,8 @@ app.use(
   authRoutes
 );
 
-app.post("/products", async (req, res) => {
-  const payload = req.body;
-  const product = new Product(payload);
-  await product.save();
-  res.status(201).end();
+app.get("/", (req, res) => {
+  res.send("Hello World");
 });
 
 app.post("/schools", async (req, res) => {
@@ -49,18 +45,7 @@ app.post("/schools", async (req, res) => {
   res.status(201).end();
 });
 
-app.get("/products", async (req, res) => {
-  const products = await Product.find({});
-  res.json(products);
-});
 
-app.get("/", (req, res) => {
-  res.send("Hello World");
-});
-app.get("/hello", (req, res) => {
-  const { name } = req.query;
-  res.json({ name: name });
-});
 app.listen(port, () => {
   console.log(`Start server at port ${port}.`);
 });
