@@ -12,7 +12,6 @@ const session = require('express-session');
 require("dotenv").config();
 require('./config/passport')(passport)
 
-
 mongoose.connect(process.env.DB_URI, {
   useNewUrlParser: true,
 });
