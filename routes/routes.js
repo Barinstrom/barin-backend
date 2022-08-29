@@ -12,7 +12,7 @@ const SALT_WORK_FACTOR = process.env.SALT_WORK_FACTOR;
 require("dotenv").config();
 
 router.route("/register").post(async (req, res) => {
-  const { userId, password, confirmPassword, email, role, certificate_doc, status, confirmationCode } =
+  const { userId, password, confirmPassword, email, role, certificate_doc} =
     req.body;
 
   if (password != confirmPassword)
