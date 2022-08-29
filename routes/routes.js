@@ -4,6 +4,8 @@ const bcrypt = require("bcryptjs");
 const validator = require("validator");
 const jwt = require("jsonwebtoken");
 const UserModel = require("../models/user");
+const SchoolModel = require('../models/school');
+const AdminModel = require('../models/admin');
 const userService = require("../services/users");
 const { cloudinary } = require("../utils/cloudinary");
 const { sender } = require("../mail/mail.js");
@@ -14,11 +16,16 @@ require("dotenv").config();
 router.route("/register").post(async (req, res) => {
   const { userId, password, confirmPassword, email, role, certificate_doc} =
     req.body;
+    console.log(req.body);
+  // ให้ front เป็น schoolID กับ name ด้วย 
+  // schoolID จะเป็น path ที่ใช้ route ในหน้า front ซึ่งจะใช้กับ back ด้วยเพื่อความง่าย
 
   if (password != confirmPassword)
     return res.status(400).send("Password is not same.");
-  if ((!userId, !password, !email, !role))
+  if ((!userId, !password, !email, !role)){
+    console.log(userId, password, email, role);
     return res.status(400).send("Please enter all parameter.");
+  }
   if (!validator.isEmail(email))
     return res.status(400).send("Email format is not correct.");
 
@@ -37,8 +44,6 @@ router.route("/register").post(async (req, res) => {
   console.log(token)
   const data = {
     userId,
-    email,
-    role,
     password: hashPassword,
     certificate_doc: url_doc,
     status: "Pending",

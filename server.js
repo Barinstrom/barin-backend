@@ -19,7 +19,9 @@ mongoose.connect(process.env.DB_URI, {
 app.use(cors())
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
+// unsecured routes
 app.use(routes);
+
 app.use(session({ 
   resave: false,
   saveUninitialized: true,
@@ -27,6 +29,7 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+// '/auth' => secured route
 app.use(
   "/auth",
   passport.authenticate("jwt", { session: false }),
@@ -36,15 +39,10 @@ app.use(
 app.get("/", (req, res) => {
   res.send("Hello World");
 });
-
-app.post("/schools", async (req, res) => {
-  const payload = req.body;
-  const school = new School(payload);
-  await school.save();
-  res.status(201).end();
+app.get("/hello", (req, res) => {
+  const { name } = req.query;
+  res.json({ name: name });
 });
-
-
 app.listen(port, () => {
   console.log(`Start server at port ${port}.`);
 });
