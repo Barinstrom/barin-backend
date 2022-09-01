@@ -3,7 +3,7 @@ const UserModel = require("../../models/user");
 const getUserByUsername = async userId => {
   try {
     return await UserModel.findOne()
-      .where("userId", userId)
+      .where("email", userId)
       .lean();
   } catch (error) {
     console.log(error);
