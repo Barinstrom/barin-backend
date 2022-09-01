@@ -17,11 +17,13 @@ const schoolSchema = new Schema({
     required: true,
   },
   paymentStatus: {
-    type: Number,
+    type: String,
+    enum: ['success', 'pending'],
     required: true,
   },
   status: {
-    type: Number,
+    type: String,
+    enum: ['success', 'pending','reject'],
     required: true,
   },
   enteredDate: {

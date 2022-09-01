@@ -22,6 +22,11 @@ const ClubSchema = new Schema({
     type: Number,
     required: true,
   },
+  teacherId: [mongoose.ObjectId],
+  year: {
+    type: Number,
+    required: true,
+  },
   schedule: [String],
   reviews: [mongoose.ObjectId],
   picture: {

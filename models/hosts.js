@@ -2,8 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const HostSchema = new Schema({
-    _id: false,
-    userID: {
+    userId: {
         type: mongoose.ObjectId,
         required: true,
         unique: true,

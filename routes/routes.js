@@ -15,13 +15,13 @@ const SALT_WORK_FACTOR = process.env.SALT_WORK_FACTOR;
 require("dotenv").config();
 
 router.route("/register").post(async (req, res) => {
-  const { userId, password, confirmPassword, email, role, certificate_doc } =
+  const { email, password, confirmPassword,schoolID,schoolName, role, certificate_doc } =
     req.body;
 
   if (password != confirmPassword)
     return res.status(400).send("Password is not same.");
-  if ((!userId, !password, !email, !role)) {
-    console.log(userId, password, email, role);
+  if ((!email, !password, !email, !role, !schoolID)) {
+    console.log(email, password, email, role);
     return res.status(400).send("Please enter all parameter.");
   }
   if (!validator.isEmail(email))
@@ -30,7 +30,7 @@ router.route("/register").post(async (req, res) => {
   const hashPassword = bcrypt.hashSync(password, 10);
   const uploadedRes = await cloudinary.uploader.upload(certificate_doc, {
     upload_preset: "certificate_doc",
-    public_id: userId,
+    public_id: email,
   });
   const url_doc = uploadedRes.secure_url;
 
@@ -41,25 +41,52 @@ router.route("/register").post(async (req, res) => {
     token += characters[Math.floor(Math.random() * characters.length)];
   }
   console.log(token);
-  const data = {
-    userId,
-    email,
-    role,
-    password: hashPassword,
-    certificate_doc: url_doc,
-    status: "Pending",
-    confirmationCode: token,
-  };
+  const school = await SchoolModel.findOne({schoolID}).exec();
+  const schoolByName = await SchoolModel.findOne({schoolName}).exec();
+  const checkuser = await UserModel.findOne({email}).exec();
+  //console.log(school,schoolByName)
+  if(!school && !schoolByName && !checkuser){
+    const schoolData = {
+      schoolID,
+      schoolName,
+      urlCertificateDocument: url_doc,
+      paymentStatus: 'pending',
+      status: 'pending', // 0=pending -1=reject 1=approve
+      enteredData: new Date(),
+      // request , club , schedule urllog bgcolor => null at this point
+    }
+    new_school = await SchoolModel.create(schoolData);
 
-  const user = new UserModel(data);
-  const _user = await user.save();
-  sender(data.email, data.userId, data.confirmationCode);
-  return res.json({ success: true, data: _user });
+    const data = {
+      email,
+      role,
+      school: schoolID,
+      password: hashPassword,
+      status: "Pending",
+      confirmationCode: token,
+    };
+    
+    const user = new UserModel(data);
+    const _user = await user.save();
+    await AdminModel.create({userId:_user._id});
+    sender(data.email, data.email, data.confirmationCode);
+    return res.json({ success: true, data: _user });
+  }
+  else if(!school){
+    return res.status(400).send("SchoolID is already exist.");
+  }
+  else if(!schoolByName){
+    return res.status(400).send("Your school is already registered.");
+  }
+  else{
+    return res.status(400).send("user already exist");
+  }
+
 });
 
 router.route("/login").post(async (req, res) => {
-  const { userId, password } = req.body;
-  const _user = await userService.getUserByUsername(userId);
+  const { email, password } = req.body;
+  const _user = await userService.getUserByUsername(email);
   if (_user) {
     if (bcrypt.compareSync(password, _user.password)) {
       const _userInfo = await userService.getUserWithoutPassword(_user._id);
@@ -73,7 +100,7 @@ router.route("/login").post(async (req, res) => {
         return res.status(401).send("Email is not activated");
       }
     }
-  } else if (!userId || !password) {
+  } else if (!email || !password) {
     return res.status(400).send("Please enter email and password.");
   }
   return res.status(401).send("Email or password is not correct.");

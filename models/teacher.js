@@ -1,10 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const validator = require('validator')
 
 const TeacherSchema = new Schema({
-    _id: false,
-    _id: {
+    userId: {
         type: mongoose.ObjectId,
         required: true,
         unique: true,
@@ -18,16 +16,6 @@ const TeacherSchema = new Schema({
         required: true,
     },
     tel: String,
-    email: {
-        type: String,
-        validate: {
-            validator: (v) => {
-                return validator.isEmail(v);
-            },
-            message: (props) => `${props.value} is not a valid email`,
-        },
-        required: [true, "email required !"],
-    },
     clubs: [mongoose.ObjectId],
 });
 
