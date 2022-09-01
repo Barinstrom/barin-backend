@@ -55,7 +55,7 @@ router.route("/register").post(async (req, res) => {
       enteredData: new Date(),
       // request , club , schedule urllog bgcolor => null at this point
     }
-    new_school = await SchoolModel.create(schoolData);
+    await SchoolModel.create(schoolData);
 
     const data = {
       email,
