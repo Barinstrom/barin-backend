@@ -9,14 +9,22 @@ const AdminModel = require("../models/admin");
 const userService = require("../services/users");
 const { cloudinary } = require("../utils/cloudinary");
 const { sender } = require("../utils/mail");
+const { forgot_pass } = require("../utils/forgot_password");
 const verifyUser = require("../middleware/verifyUser");
 
 const SALT_WORK_FACTOR = process.env.SALT_WORK_FACTOR;
 require("dotenv").config();
 
 router.route("/register").post(async (req, res) => {
-  const { email, password, confirmPassword,schoolID,schoolName, role, certificate_doc } =
-    req.body;
+  const {
+    email,
+    password,
+    confirmPassword,
+    schoolID,
+    schoolName,
+    role,
+    certificate_doc,
+  } = req.body;
 
   if (password != confirmPassword)
     return res.status(400).send("Password is not same.");
@@ -41,20 +49,20 @@ router.route("/register").post(async (req, res) => {
     token += characters[Math.floor(Math.random() * characters.length)];
   }
   console.log(token);
-  const school = await SchoolModel.findOne({schoolID}).exec();
-  const schoolByName = await SchoolModel.findOne({schoolName}).exec();
-  const checkuser = await UserModel.findOne({email}).exec();
+  const school = await SchoolModel.findOne({ schoolID }).exec();
+  const schoolByName = await SchoolModel.findOne({ schoolName }).exec();
+  const checkuser = await UserModel.findOne({ email }).exec();
   //console.log(school,schoolByName)
-  if(!school && !schoolByName && !checkuser){
+  if (!school && !schoolByName && !checkuser) {
     const schoolData = {
       schoolID,
       schoolName,
       urlCertificateDocument: url_doc,
-      paymentStatus: 'pending',
-      status: 'pending', // 0=pending -1=reject 1=approve
+      paymentStatus: "pending",
+      status: "pending", // 0=pending -1=reject 1=approve
       enteredData: new Date(),
       // request , club , schedule urllog bgcolor => null at this point
-    }
+    };
     await SchoolModel.create(schoolData);
 
     const data = {
@@ -65,23 +73,19 @@ router.route("/register").post(async (req, res) => {
       status: "Pending",
       confirmationCode: token,
     };
-    
+
     const user = new UserModel(data);
     const _user = await user.save();
-    await AdminModel.create({userId:_user._id});
+    await AdminModel.create({ userId: _user._id });
     sender(data.email, data.email, data.confirmationCode);
     return res.json({ success: true, data: _user });
-  }
-  else if(!school){
+  } else if (!school) {
     return res.status(400).send("SchoolID is already exist.");
-  }
-  else if(!schoolByName){
+  } else if (!schoolByName) {
     return res.status(400).send("Your school is already registered.");
-  }
-  else{
+  } else {
     return res.status(400).send("user already exist");
   }
-
 });
 
 router.route("/login").post(async (req, res) => {
@@ -95,8 +99,7 @@ router.route("/login").post(async (req, res) => {
           expiresIn: "1h",
         });
         return res.json({ success: true, token: token });
-      }
-      else {
+      } else {
         return res.status(401).send("Email is not activated");
       }
     }
@@ -108,4 +111,78 @@ router.route("/login").post(async (req, res) => {
 
 router.get("/confirm/:confirmationCode", verifyUser);
 
+router.route("/forgotpassword").post(async (req, res) => {
+  const { email } = req.body;
+  if (!email)
+    return res
+      .status(401)
+      .send("Please enter your email that you want to reset.");
+  const _user = await UserModel.findOne({ email }).exec();
+  if (_user) {
+    const token = jwt.sign({ email: email }, process.env.RESET_PASSWORD_KEY, {
+      expiresIn: "15m",
+    });
+    forgot_pass(email, email, token);
+    let reseted = await _user.updateOne({ resetToken: token });
+    if (reseted) {
+      res.status(200).send("Email has been sent,Please check your email.");
+    } else {
+      res.status(401).send("Can not edit database.");
+    }
+  } else {
+    return res.status(401).send("Email is not exist on database.");
+  }
+});
+
+router.route("/updatepassword").post(async (req, res) => {
+  const { newPassword, confirmNewPassword, token } = req.body;
+  if (token) {
+    jwt.verify(
+      token,
+      process.env.RESET_PASSWORD_KEY,
+      async (error, decodedData) => {
+        if (error) {
+          return res.status(400).send("Incorrect token or it is expired");
+        }
+        UserModel.findOne({ resetToken: token }, (err, user) => {
+          if (err || !user) {
+            return res.status(400).send("User with this token does not exist");
+          }
+          if (newPassword != confirmNewPassword) {
+            return res.status(400).send("Password is not same");
+          }
+          const hashPassword = bcrypt.hashSync(newPassword, 10);
+
+          user.password = hashPassword;
+          user.save((err, result) => {
+            if (err) {
+              return res.status(400).send("Reset Password Error");
+            } else {
+              return res.status(200).send("Your password has been changed");
+            }
+          });  
+          // let updated = UserModel.findOneAndUpdate(
+          //   {
+          //     email: user.email,
+          //   },
+          //   {
+          //     password: hashPassword,
+          //     $unset: { resetToken: ""}
+          //   },
+          //   {
+          //     new: true,
+          //   }
+          // );
+          // if (updated) {
+          //   return res.status(200).send("Password has been updated.");
+          // } else {
+          //   return res.status(401).send("Update not success.");
+          // }
+        });
+      }
+    );
+  } else {
+    return res.status(401).json({ error: "Authentication Error" });
+  }
+});
 module.exports = router;

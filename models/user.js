@@ -33,6 +33,9 @@ const userSchema = new Schema({
   confirmationCode: {
     type: String,
     unique: true
+  },
+  resetToken: {
+    type: String,
   }
 });
 
