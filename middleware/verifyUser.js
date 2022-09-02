@@ -6,6 +6,7 @@ const verifyUser = async (req, res, next) => {
     },
     {
       status: "Active",
+      $unset: { confirmationCode: ""}
     },
     {
       new: true,
