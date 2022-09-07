@@ -38,6 +38,8 @@ const schoolSchema = new Schema({
   },
   urlLogo: String,
   bgColor: String,
+  schedule: [mongoose.ObjectId],
+  adminID: [mongoose.ObjectId],
 });
 
 const SchoolModel = mongoose.model("School", schoolSchema);

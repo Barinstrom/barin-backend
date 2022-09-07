@@ -31,6 +31,7 @@ const StudentSchema = new Schema({
     reviews: [mongoose.ObjectId],
     // request.find({ _id: { $in: followedIDs } }) to query request
     requests: [mongoose.ObjectId],
+    clubs: [mongoose.ObjectId],
 });
 
 module.exports = mongoose.model("Student",StudentSchema);

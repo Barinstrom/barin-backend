@@ -14,16 +14,12 @@ const ClubSchema = new Schema({
   clubInfo: {
     type: String,
   },
-  count: {
-    type: Number,
-    default: 0,
-  },
   limit: {
     type: Number,
     required: true,
   },
   teacherId: [mongoose.ObjectId],
-  year: {
+  schoolYear: {
     type: Number,
     required: true,
   },
