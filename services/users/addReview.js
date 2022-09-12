@@ -3,14 +3,12 @@ const reviewModel = require("../../models/review");
 const studentModel = require("../../models/student");
 
 const addReview = async (req, res) => {
-   //หา club 
+   //หา groupID ของ club
    const clubID = req.body.clubID;
    const club = await clublModel.findById(clubID);
    const groupID = club.groupID;
 
-   //หา student 
    const studentID = req.body.studentID;
-   const student = await studentModel.findOne({ userID: studentID });
 
    // add new review in reviews
    const payloadReview = { textReview: req.body.textReview, groupID: groupID, studentID: studentID };
