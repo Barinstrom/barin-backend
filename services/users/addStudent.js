@@ -4,7 +4,7 @@ const schoolModel = require("../../models/school");
 const { sender } = require("../../utils/mail");
 const jwt = require("jsonwebtoken");
 const addStudent = async (req, res) => {
-   const { email, firstname, lastname, enteredYear, classYear, isActive, tel } =
+   const { email, firstname, lastname, enteredYear, classYear, isActive, tel = '' } =
       req.body;
 
    if ((!email, !firstname, !lastname, !enteredYear, !classYear, !isActive)) {

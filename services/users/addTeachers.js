@@ -1,17 +1,17 @@
 const teacherModel = require("../../models/teacher");
 const userModel = require("../../models/user");
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const { sender } = require("../../utils/mail");
 
 const addTeachers = async (req, res) => {
    let mergingTeacher = req.body; // array of object
    for (let i = 0; i < mergingTeacher.length; i++) {
-      const { email, schoolID, firstname, lastname, tel, clubs } = mergingTeacher[i];
-      if ((!email, !firstname, !lastname, !schoolID)) {
+      const { email, firstname, lastname, tel } = mergingTeacher[i];
+      if ((!email, !firstname, !lastname)) {
          res.status(400).send({
-            error: "email, firstname, lastname, schoolID is all required for all record",
+            error: "email, firstname, lastname, is all required for all record",
          });
       }
    }
@@ -53,18 +53,18 @@ const addTeachers = async (req, res) => {
       for (let j = 0; j < doc.length; j++) {
          if (mergingTeacher[i].email == doc[j].email) {
             // old teacher => update
-            const { email, schoolID, firstname, lastname, tel, clubs } =
+            const { email, firstname, lastname, tel} =
                mergingTeacher[i];
-            const clubsID = clubs.map((el) => {
-               return new mongoose.mongo.ObjectId(el);
-            });
+            // const clubsID = clubs.map((el) => {
+            //    return new mongoose.mongo.ObjectId(el);
+            // });
             const update_data = {
                email,
-               schoolID,
+               schoolID: req.userInfo.schoolID,
                firstname,
                lastname,
                tel,
-               clubs: clubsID,
+               // clubs: clubsID,
             };
             teacherModel.findByIdAndUpdate(doc[j].teacher._id, {
                $set: update_data,
@@ -74,19 +74,18 @@ const addTeachers = async (req, res) => {
       }
       //console.log('aaaa',isold);
       if (!isold) {
-         const { email, schoolID, firstname, lastname, tel, clubs } =
-            mergingTeacher[i];
-         const clubsID = clubs.map((el) => {
-            return new mongoose.mongo.ObjectId(el);
-         });
-         if (
-            req.userInfo.role === "admin" &&
-            req.userInfo.schoolID !== schoolID
-         ) {
-            return res
-               .status(401)
-               .send({ error: "this school is not your school" });
-         }
+         const { email, firstname, lastname, tel} = mergingTeacher[i];
+         // const clubsID = clubs.map((el) => {
+         //    return new mongoose.mongo.ObjectId(el);
+         // });
+         // if (
+         //    req.userInfo.role === "admin" &&
+         //    req.userInfo.schoolID !== schoolID
+         // ) {
+         //    return res
+         //       .status(401)
+         //       .send({ error: "this school is not your school" });
+         // }
          const characters =
             "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
          let password = "";
@@ -101,7 +100,7 @@ const addTeachers = async (req, res) => {
 
          const new_user = await userModel.create({
             email,
-            schoolID,
+            schoolID: req.userInfo.schoolID,
             role: "teacher",
             password,
             status: "Pending",
@@ -112,7 +111,7 @@ const addTeachers = async (req, res) => {
             firstname,
             lastname,
             tel,
-            clubs: clubsID,
+            // clubs: clubsID,
          });
          sender(new_user.email, new_user.email, new_user.confirmationCode);
          new_teacher.push(new_user);

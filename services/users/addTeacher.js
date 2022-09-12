@@ -6,21 +6,26 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const addTeacher = async (req, res) => {
-   const { email, schoolID, firstname, lastname, tel, clubs } = req.body;
-   const clubsID = clubs.map((el) => {
-      return new mongoose.mongo.ObjectId(el);
-   });
-   if ((!email, !firstname, !lastname, !schoolID)) {
+   const { email, firstname, lastname, tel } = req.body;
+   // let clubsID = [];
+   // if(!clubs){
+   //    clubsID = clubs.map((el) => {
+   //       return new mongoose.mongo.ObjectId(el);
+   //    });
+   // }
+   if ((!email, !firstname, !lastname)) {
       res.status(400).send({
-         error: "email, firstname, lastname, schoolID is all required",
+         error: "email, firstname, lastname is all required",
       });
    }
    const _user = await userModel.findOne({ email: email }).exec();
-   const _school = await schoolModel.findOne({ schoolID: schoolID }).exec();
+   const _school = await schoolModel
+      .findOne({ schoolID: req.userInfo.schoolID })
+      .exec();
    console.log("_user", _user);
-   if (req.userInfo.role === "admin" && req.userInfo.schoolID !== schoolID) {
-      return res.status(401).send({ error: "this school is not your school" });
-   }
+   // if (req.userInfo.role === "admin" && req.userInfo.schoolID !== schoolID) {
+   //    return res.status(401).send({ error: "this school is not your school" });
+   // }
    if (_user) {
       return res.status(400).send({ error: "email is already exist" });
    }
@@ -40,7 +45,7 @@ const addTeacher = async (req, res) => {
 
    const new_user = await userModel.create({
       email,
-      schoolID,
+      schoolID: req.userInfo.schoolID,
       role: "teacher",
       password,
       status: "Pending",
@@ -51,7 +56,7 @@ const addTeacher = async (req, res) => {
       firstname,
       lastname,
       tel,
-      clubs: clubsID,
+      // clubs: clubsID,
    });
    sender(new_user.email, new_user.email, new_user.confirmationCode);
    res.send({ success: true });
