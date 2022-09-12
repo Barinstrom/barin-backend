@@ -12,7 +12,7 @@ const getStudentOwnClubs = require("../../services/users/getStudentOwnClubs");
 const getTeacherOwnClubs = require("../../services/users/getTeacherOwnClubs");
 const getStudentPastClubs = require("../../services/users/getStudentPastClubs");
 const editSchool = require("../../services/users/system_admin/schoolEdit");
-// const editAdmin = require("../../services/users/system_admin/adminEdit");
+const editAdmin = require("../../services/users/system_admin/adminEdit");
 const addTeacher = require("../../services/users/addTeacher");
 const addTeachers = require("../../services/users/addTeachers");
 const addStudent = require("../../services/users/addStudent");
@@ -42,8 +42,8 @@ router.post(
    verifyRole("host", "admin", "teacher", "student"),
    updateReview
 );
-router.post("/edit", verifyRole("host", "admin"), editSchool);
-// router.post("/edit_admin", verifyRole("host", "admin"), editAdmin);
+router.patch("/edit", verifyRole("host", "admin"), editSchool);
+router.patch("/edit_admin", verifyRole("host", "admin"), editAdmin);
 router.get("/student/ownclub", verifyRole("student"), getStudentOwnClubs);
 router.get("/teacher/ownclubs", verifyRole("teacher"), getTeacherOwnClubs);
 router.get("/student/pastclubs", verifyRole("student"), getStudentPastClubs);
