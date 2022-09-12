@@ -1,12 +1,7 @@
 const express = require("express");
 const router = express.Router();
-<<<<<<< HEAD
 
-const verifyRole = require('../../middleware/verifyRole');
-
-=======
 const verifyRole = require("../../middleware/verifyRole");
->>>>>>> 0a24658198f34b2eebd86418224ec1de653714c5
 const queryUser = require("../../services/users/queryUser");
 const addClub = require("../../services/users/addClub");
 const registerClub = require("../../services/users/registerClub");
