@@ -17,7 +17,7 @@ const addReview = async (req, res) => {
    const payloadStudent = [...student.reviews, reviewID];
    await studentModel.updateOne({userID : studentID}, { $set: { reviews: payloadStudent } });
 
-   
+
    //หา club เพื่อไป add reviewID in club
    const clubID = req.body.clubID;
    const club = await clublModel.findById(clubID);
@@ -27,7 +27,7 @@ const addReview = async (req, res) => {
    await clublModel
       .findByIdAndUpdate(clubID, { $set: { reviews: payloadClub } })
       .then(() => {
-         res.send("Add review in club success.");
+         res.send("Add review success.");
       })
       .catch((err) => {
          res.status(400).send(err);

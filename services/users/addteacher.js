@@ -1,36 +1,22 @@
+const teacherModel = require("../../models/teacher");
 const userModel = require("../../models/user");
-const studentModel = require("../../models/student");
 const schoolModel = require("../../models/school");
 const { sender } = require("../../utils/mail");
-const jwt = require('jsonwebtoken')
-
-const addStudent = async (req, res) => {
-   const {
-      email,
-      schoolID,
-      firstname,
-      lastname,
-      enteredYear,
-      classYear,
-      isActive,
-      tel,
-   } = req.body;
-
-   if (
-      (!email,
-      !firstname,
-      !lastname,
-      !schoolID,
-      !enteredYear,
-      !classYear,
-      !isActive)
-   ) {
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
+const addTeacher = async (req, res) => {
+   const { email, schoolID, firstname, lastname, tel, clubs } = req.body;
+   const clubsID = clubs.map((el) => {
+      return new mongoose.mongo.ObjectId(el);
+   });
+   if ((!email, !firstname, !lastname, !schoolID)) {
       res.status(400).send({
          error: "email, firstname, lastname, schoolID is all required",
       });
    }
-   const _user = await userModel.findOne({ email }).exec();
-   const _school = await schoolModel.findOne({ schoolID }).exec();
+   const _user = await userModel.findOne({ email: email }).exec();
+   const _school = await schoolModel.findOne({ schoolID: schoolID }).exec();
+   console.log("_user", _user);
    if (req.userInfo.role === "admin" && req.userInfo.schoolID !== schoolID) {
       return res.status(401).send({ error: "this school is not your school" });
    }
@@ -46,6 +32,7 @@ const addStudent = async (req, res) => {
    for (let i = 0; i < 25; i++) {
       password += characters[Math.floor(Math.random() * characters.length)];
    }
+   password = bcrypt.hashSync(password, 10);
    const token = jwt.sign({ email: email }, process.env.SECRET, {
       expiresIn: "7d",
    });
@@ -53,24 +40,20 @@ const addStudent = async (req, res) => {
    const new_user = await userModel.create({
       email,
       schoolID,
-      role: "student",
+      role: "teacher",
       password,
       status: "Pending",
       confirmationCode: token,
    });
-   const new_student = await studentModel.create({
+   await teacherModel.create({
       userID: new_user._id,
       firstname,
       lastname,
-      enteredYear,
-      classYear,
-      isActive,
-      reviews: [],
-      clubs: [],
       tel,
+      clubs: clubsID,
    });
    sender(new_user.email, new_user.email, new_user.confirmationCode);
-   return res.json({ success: true, user: new_user, student: new_student });
+   res.send({ success: true });
 };
 
-module.exports = addStudent;
+module.exports = addTeacher;
