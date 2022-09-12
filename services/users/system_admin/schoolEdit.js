@@ -1,4 +1,4 @@
-const adminModel = require("../../../models/admin");
+const schoolModel = require("../../../models/school");
 
 const schoolEdit = (req, res) => {
    const values = ({
@@ -6,10 +6,11 @@ const schoolEdit = (req, res) => {
       schoolName,
       urlCertificateDocument,
       paymentStatus,
-      status,
+      status
    } = req.body);
+   console.log(req.body)
    schoolModel
-      .findOneAndUpdate({ schoolID: values.schoolID }, { $set: { values } })
+      .findOneAndUpdate({ schoolID: values.schoolID }, values)
       .then(() => {
          res.json({
             message: "School updated successfully",
