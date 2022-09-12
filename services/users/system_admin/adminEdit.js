@@ -6,7 +6,9 @@ const mongoose = require("mongoose");
 const editAdmin = (req, res) => {
    const values = ({ _id, email, password, tel } = req.body);
    const hashPassword = bcrypt.hashSync(values.password, 10);
+   const result = []
    
+
    if (req.userInfo.role !== "host") {
     return res.status(401).send({ error: "You doesn't have access to do that" });
     }  
@@ -17,13 +19,11 @@ const editAdmin = (req, res) => {
       email: values.email,
       password: hashPassword} })
       .then(() => {
-         res.json({
-            message: "admin updated email or password successfully",
-         });
+         result.push("admin updated email or password successfully")
       })
       .catch((err) => {
          res.json({
-            message: "Error updating school",
+            message: "Error updating school"
          });
       });
     
@@ -31,13 +31,14 @@ const editAdmin = (req, res) => {
       .findOneAndUpdate({ userID: obj_id }, { $set: { 
       tel: values.tel} })
       .then((result) => {
+         result.push("update telephone success")
          res.json({
-            message: "update telephone success",
+            message: "update telephone success"
          });
       })
       .catch((err) => {
          res.json({
-            message: "Error updating telephone",
+            message: "Error updating telephone"
          });
       });
 };
