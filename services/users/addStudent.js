@@ -2,33 +2,17 @@ const userModel = require("../../models/user");
 const studentModel = require("../../models/student");
 const schoolModel = require("../../models/school");
 const { sender } = require("../../utils/mail");
-const jwt = require('jsonwebtoken')
-
+const jwt = require("jsonwebtoken");
 const addStudent = async (req, res) => {
-   const {
-      email,
-      schoolID,
-      firstname,
-      lastname,
-      enteredYear,
-      classYear,
-      isActive,
-      tel,
-   } = req.body;
+   const { email, firstname, lastname, enteredYear, classYear, isActive, tel } =
+      req.body;
 
-   if (
-      (!email,
-      !firstname,
-      !lastname,
-      !schoolID,
-      !enteredYear,
-      !classYear,
-      !isActive)
-   ) {
+   if ((!email, !firstname, !lastname, !enteredYear, !classYear, !isActive)) {
       res.status(400).send({
          error: "email, firstname, lastname, schoolID is all required",
       });
    }
+   const schoolID = req.userInfo.schoolID;
    const _user = await userModel.findOne({ email }).exec();
    const _school = await schoolModel.findOne({ schoolID }).exec();
    if (req.userInfo.role === "admin" && req.userInfo.schoolID !== schoolID) {
