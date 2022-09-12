@@ -2,7 +2,17 @@ const schoolModel = require("../../../models/school");
 //const { PaginationParameters } = require('mongoose-paginate-v2');
 
 const getPendingSchool = (req, res) => {
-   const query = { ...req.query.query, status: "pending" };
+
+   let tmp = ""
+   if (!req.query.query){
+      tmp = ""
+   }else{
+      tmp = new RegExp("^" + req.query.query );
+   }
+   const query = {
+      schoolID: {$regex: tmp ,$options:'i'},
+      status: "pending"
+   }
    const page = req.query.page || 1;
    const limit = 3;
 
