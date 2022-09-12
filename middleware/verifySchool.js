@@ -28,6 +28,12 @@ const verifySchool = async (req,res,next) => {
         return res.status(401).send('this is not yours school :(');
     }
     // หลุดมาถึงตรงนี้ => ok มีสิทธ์เข้าถึง
+    // let now = new Date()
+    // if(((school.paymentDate.getTime()+365*24*60*60*1000)-(now.getTime()))<=0){
+    //     school.paymentStatus = "pending";
+    //     await school.save();
+    //     return res.status(400).send('need to pay');
+    // }
     next();
 }
 
