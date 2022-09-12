@@ -8,9 +8,8 @@ const schoolEdit = (req, res) => {
       paymentStatus,
       status
    } = req.body);
-   console.log(req.body)
    schoolModel
-      .findOneAndUpdate({ schoolID: values.schoolID }, values)
+      .findOneAndUpdate({ schoolID: values.schoolID }, {$set: values})
       .then(() => {
          res.json({
             message: "School updated successfully",
