@@ -17,12 +17,16 @@ const forgotpassword = async (req, res) => {
       forgot_pass(email, email, token);
       let reseted = await _user.updateOne({ resetToken: token });
       if (reseted) {
-         res.status(200).send("Email has been sent,Please check your email.");
+         res.status(200).json({
+            message: "Email has been sent,Please check your email.",
+         });
       } else {
-         res.status(401).send("Can not edit database.");
+         res.status(401).json({ message: "Can not edit database." });
       }
    } else {
-      return res.status(401).send("Email is not exist on database.");
+      return res
+         .status(401)
+         .json({ message: "Email is not exist on database." });
    }
 };
 

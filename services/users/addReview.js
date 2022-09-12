@@ -3,26 +3,29 @@ const reviewModel = require("../../models/review");
 const studentModel = require("../../models/student");
 
 const addReview = async (req, res) => {
-   // add review in reviews
-   const textReview = { textReview: req.body.textReview };
-   const review = new reviewModel(textReview);
-   const newReview = await review.save();
-   const reviewID = newReview._id;
+   //หา club 
+   const clubID = req.body.clubID;
+   const club = await clublModel.findById(clubID);
+   const groupID = club.groupID;
 
-   //หา student เพื่อไป add reviewID in student
+   //หา student 
    const studentID = req.body.studentID;
    const student = await studentModel.findOne({ userID: studentID });
 
+   // add new review in reviews
+   const payloadReview = { textReview: req.body.textReview, groupID: groupID, studentID: studentID };
+   const review = new reviewModel(payloadReview);
+   const newReview = await review.save();
+   const reviewID = newReview._id;
+   
    // add reviewID in student
+   console.log(student.firstname, student.lastname);
+   console.log(student.reviews);
    const payloadStudent = [...student.reviews, reviewID];
    await studentModel.updateOne(
       { userID: studentID },
       { $set: { reviews: payloadStudent } }
    );
-
-   //หา club เพื่อไป add reviewID in club
-   const clubID = req.body.clubID;
-   const club = await clublModel.findById(clubID);
 
    // add reviewID in club
    const payloadClub = [...club.reviews, reviewID];
