@@ -8,7 +8,6 @@ const schoolEdit = (req, res) => {
       paymentStatus,
       status
    } = req.body);
-   console.log(req.body)
    schoolModel
       .findOneAndUpdate({ schoolID: values.schoolID }, values)
       .then(() => {

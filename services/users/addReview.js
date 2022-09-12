@@ -11,12 +11,14 @@ const addReview = async (req, res) => {
 
    //หา student เพื่อไป add reviewID in student
    const studentID = req.body.studentID;
-   const student = await studentModel.findOne({userID : studentID});
+   const student = await studentModel.findOne({ userID: studentID });
 
    // add reviewID in student
    const payloadStudent = [...student.reviews, reviewID];
-   await studentModel.updateOne({userID : studentID}, { $set: { reviews: payloadStudent } });
-
+   await studentModel.updateOne(
+      { userID: studentID },
+      { $set: { reviews: payloadStudent } }
+   );
 
    //หา club เพื่อไป add reviewID in club
    const clubID = req.body.clubID;
@@ -27,7 +29,7 @@ const addReview = async (req, res) => {
    await clublModel
       .findByIdAndUpdate(clubID, { $set: { reviews: payloadClub } })
       .then(() => {
-         res.send("Add review success.");
+         res.send({ success: true });
       })
       .catch((err) => {
          res.status(400).send(err);
