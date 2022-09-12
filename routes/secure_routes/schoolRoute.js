@@ -11,7 +11,7 @@ const editSchool = require("../../services/users/system_admin/schoolEdit");
 const addTeacher = require("../../services/users/addTeacher");
 const addTeachers = require("../../services/users/addTeachers");
 const addStudent = require("../../services/users/addStudent");
-
+const querySchool = require("../../services/users/querySchool");
 //router.use('/admin',verifyRole('admin'),adminRoute);
 router.get(
    "/user",
@@ -26,5 +26,6 @@ router.post("/add-review",verifyRole("host", "admin", "teacher", "student"),addR
 router.post("/edit", verifyRole("host", "admin"), editSchool);
 router.get("/student/ownclub", verifyRole("student"), getStudentOwnClubs);
 router.get("/teacher/ownclubs", verifyRole("teacher"), getTeacherOwnClubs);
+router.get("/get-school", verifyRole("host", "admin"), querySchool);
 
 module.exports = router;
