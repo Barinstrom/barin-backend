@@ -16,7 +16,7 @@ router.get("/schools/approved", verifyRole("host"), getApprovedSchool);
 router.get("/schools/pending", verifyRole("host"), getPendingSchool);
 router.get("/schools/not-approved", verifyRole("host"), getNotApprovedSchool);
 
-router.use("/:school", verifySchool, schoolRoute);
+router.use("/:schoolID", verifySchool, schoolRoute);
 
 router.get("/", (req, res) => {
    res.send("auth");
