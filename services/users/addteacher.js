@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const addTeacher = async (req, res) => {
-   const { email, firstname, lastname, tel, clubs } = req.body;
+   const { email, schoolID, firstname, lastname, tel, clubs } = req.body;
    const clubsID = clubs.map((el) => {
       return new mongoose.mongo.ObjectId(el);
    });
