@@ -1,8 +1,12 @@
 const reviewModel = require("../../models/review");
 
 const updateReview = async (req, res) => {
-   
    const reviewID = req.body.reviewID;
+   const review = await reviewModel.findById(reviewID)
+   if(!review)
+   {
+      return res.status(400).send("Invalid reviewID")
+   }
    // update review
    await reviewModel.findByIdAndUpdate(reviewID , { $set: { textReview : req.body.textReview } })
       .then(() => {
