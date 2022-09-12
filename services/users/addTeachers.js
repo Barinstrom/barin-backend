@@ -1,10 +1,12 @@
 const teacherModel = require("../../models/teacher");
 const userModel = require("../../models/user");
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const { sender } = require("../../utils/mail");
 
-// /:school
 const addTeachers = async (req, res) => {
-   let mergingTeacher = req,
-      body; // array of object
+   let mergingTeacher = req.body; // array of object
    for (let i = 0; i < mergingTeacher.length; i++) {
       const { email, schoolID, firstname, lastname, tel, clubs } =
          mergingTeacher[i];
@@ -45,7 +47,8 @@ const addTeachers = async (req, res) => {
       ])
       .exec();
 
-   //const new_teacher = [];
+   const new_teacher = [];
+   //console.log(mergingTeacher.length,doc.length)
    for (let i = 0; i < mergingTeacher.length; i++) {
       let isold = false;
       for (let j = 0; j < doc.length; j++) {
@@ -70,6 +73,7 @@ const addTeachers = async (req, res) => {
             isold = true;
          }
       }
+      //console.log('aaaa',isold);
       if (!isold) {
          const { email, schoolID, firstname, lastname, tel, clubs } =
             mergingTeacher[i];
@@ -112,11 +116,12 @@ const addTeachers = async (req, res) => {
             clubs: clubsID,
          });
          sender(new_user.email, new_user.email, new_user.confirmationCode);
-         res.send({ success: true });
+         new_teacher.push(new_user);
+         //res.send({ success: true });
       }
    }
 
-   res.send(doc);
+   res.send(new_teacher);
 };
 
 module.exports = addTeachers;
