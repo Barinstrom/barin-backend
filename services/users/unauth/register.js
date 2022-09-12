@@ -50,6 +50,7 @@ const register = async (req, res) => {
          paymentStatus: "pending",
          status: "pending", // 0=pending -1=reject 1=approve
          paymentDate: new Date(),
+         schedule: []
          // request , club , schedule urllog bgcolor => null at this point
       };
       await SchoolModel.create(schoolData);
