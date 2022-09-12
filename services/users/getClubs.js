@@ -18,3 +18,25 @@ const getClubs = (req, res) => {
     //       res.status(400).send("paginate error");
     //    });
  };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

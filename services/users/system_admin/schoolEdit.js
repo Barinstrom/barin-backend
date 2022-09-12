@@ -2,12 +2,15 @@ const schoolModel = require("../../../models/school");
 
 const schoolEdit = (req, res) => {
    const values = ({
-      schoolID,
       schoolName,
-      urlCertificateDocument,
-      paymentStatus,
-      status
+      urlLogo,
+      bgColor
    } = req.body);
+
+   if (req.userInfo.role !== "admin" || req.userInfo.role !== "host") {
+      return res.status(401).send({ error: "You doesn't have access to do that" });
+   }  
+   
    schoolModel
       .findOneAndUpdate({ schoolID: values.schoolID }, {$set: values})
       .then(() => {
