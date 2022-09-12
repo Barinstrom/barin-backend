@@ -15,22 +15,7 @@ const addReview = async (req, res) => {
    // add new review in reviews
    const payloadReview = { textReview: req.body.textReview, groupID: groupID, studentID: studentID };
    const review = new reviewModel(payloadReview);
-   const newReview = await review.save();
-   const reviewID = newReview._id;
-   
-   // add reviewID in student
-   console.log(student.firstname, student.lastname);
-   console.log(student.reviews);
-   const payloadStudent = [...student.reviews, reviewID];
-   await studentModel.updateOne(
-      { userID: studentID },
-      { $set: { reviews: payloadStudent } }
-   );
-
-   // add reviewID in club
-   const payloadClub = [...club.reviews, reviewID];
-   await clublModel
-      .findByIdAndUpdate(clubID, { $set: { reviews: payloadClub } })
+   const newReview = await review.save()
       .then(() => {
          res.send({ success: true });
       })
