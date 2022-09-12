@@ -20,7 +20,7 @@ const getPendingSchool = (req, res) => {
          res.send(result);
       })
       .catch((err) => {
-         res.ustats(400).send("paginate error");
+         res.status(400).send("paginate error");
       });
 };
 
