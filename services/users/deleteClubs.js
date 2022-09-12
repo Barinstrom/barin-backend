@@ -13,7 +13,6 @@ const deleteClub = async (req, res) =>{
     }
     for(let i=0; i<clubIDs.length; i++)
     {
-        // console.log(await ClubModel.findById(clubIDs[i]))
         await ClubModel.findByIdAndDelete(clubIDs[i])
     }
     res.json({'success': true})

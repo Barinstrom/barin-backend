@@ -5,7 +5,7 @@ const updateReview = async (req, res) => {
    // update review
    await reviewModel.findByIdAndUpdate(reviewID , { $set: { textReview : req.body.textReview } })
       .then(() => {
-         res.send("Edit review success.");
+         res.send({'success': true});
       })
       .catch((err) => {
          res.status(400).send(err);
