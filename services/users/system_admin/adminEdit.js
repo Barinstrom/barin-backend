@@ -7,6 +7,10 @@ const editAdmin = (req, res) => {
    const values = ({ _id, email, password, tel } = req.body);
    const hashPassword = bcrypt.hashSync(values.password, 10);
    
+   if (req.userInfo.role !== "host") {
+    return res.status(401).send({ error: "You doesn't have access to do that" });
+    }  
+
    const obj_id = new mongoose.mongo.ObjectId(values._id);
    userModel
       .findOneAndUpdate({ _id: obj_id }, { $set: { 

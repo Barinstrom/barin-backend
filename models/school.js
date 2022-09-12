@@ -34,14 +34,14 @@ const schoolSchema = new Schema({
       type: Date,
       require: true,
    },
-   //requests: [mongoose.ObjectId],
-   //clubs: [mongoose.ObjectId],
-   schedule: {
+   requests: [mongoose.ObjectId],
+   clubs: [mongoose.ObjectId],
+   schedule: [{
       schoolYear: Number,
       registerDate: Date,
       endOfRegisterDate: Date,
       endOfSchoolYear: Date,
-   },
+   }],
    urlLogo: String,
    bgColor: String,
    adminID: [mongoose.ObjectId],
