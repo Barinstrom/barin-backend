@@ -2,14 +2,6 @@ const express = require("express");
 const router = express.Router();
 
 const verifyRole = require('../../middleware/verifyRole');
-const studentRoute = require("./student");
-const teacherRoute = require("./teacher");
-const adminRoute = require("./admin");
-
-router.get('/test',verifyRole('admin'),)
-router.use('/student',verifyRole('student'),studentRoute);
-router.use('/teacher',verifyRole('teacher'),teacherRoute);
-router.use('/admin',verifyRole('admin'),adminRoute);
 
 const queryUser = require("../../services/users/queryUser");
 const addClub = require("../../services/users/addClub");
@@ -24,6 +16,7 @@ const addTeacher = require("../../services/users/addTeacher");
 const addTeachers = require("../../services/users/addTeachers");
 const addStudent = require("../../services/users/addStudent");
 const querySchool = require("../../services/users/querySchool");
+const updateStudent = require("../../services/users/updateStudent");
 //router.use('/admin',verifyRole('admin'),adminRoute);
 router.get(
    "/user",
@@ -42,5 +35,6 @@ router.get("/student/ownclub", verifyRole("student"), getStudentOwnClubs);
 router.get("/teacher/ownclubs", verifyRole("teacher"), getTeacherOwnClubs);
 router.get("/student/pastclubs", verifyRole("student"), getStudentPastClubs);
 router.get("/get-school", verifyRole("host", "admin"), querySchool);
+router.patch("/update-student", verifyRole("host", "admin"), updateStudent);
 
 module.exports = router;
