@@ -6,13 +6,13 @@ const updateClub = async (req, res) => {
    delete payload["clubID"]
    // console.log(payload);
    // console.log(clubID);
-   await ClubModel.findByIdAndUpdate(clubID, {$set: payload})
-   .then(() => {
-      res.send("Edit club success.");
-   })
-   .catch((err) => {
-      res.status(400).send(err);
-   });
+   await ClubModel.findByIdAndUpdate(clubID, { $set: payload })
+      .then(() => {
+         res.json({'success': true});
+      })
+      .catch((err) => {
+         res.status(400).send(err);
+      });
 };
 
 module.exports = updateClub;

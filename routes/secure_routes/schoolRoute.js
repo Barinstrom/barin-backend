@@ -20,6 +20,7 @@ const querySchool = require("../../services/users/querySchool");
 const updateStudent = require("../../services/users/updateStudent");
 const updateTeacher = require("../../services/users/updateTeacher");
 const updateClub = require("../../services/users/updateClub");
+const deleteClubs = require("../../services/users/deleteClubs");
 //router.use('/admin',verifyRole('admin'),adminRoute);
 
 router.get(
@@ -51,5 +52,6 @@ router.get("/get-school", verifyRole("host", "admin"), querySchool);
 router.patch("/update-student", verifyRole("host", "admin"), updateStudent);
 router.patch("/update-teacher", verifyRole("host", "admin"), updateTeacher);
 router.patch("/update-club",verifyRole("teacher", "host", "admin"),updateClub);
+router.delete("/delete-clubs",verifyRole("host", "admin"), deleteClubs);
 
 module.exports = router;
