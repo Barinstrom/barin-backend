@@ -22,11 +22,7 @@ router.post("/add-club", verifyRole("host", "admin"), addClub);
 router.post("/add-student", verifyRole("host", "admin"), addStudent);
 router.post("/add-teacher", verifyRole("host", "admin"), addTeacher);
 router.post("/add-teachers", verifyRole("host", "admin"), addTeachers);
-router.post(
-   "/review",
-   verifyRole("host", "admin", "teacher", "student"),
-   addReview
-);
+router.post("/add-review",verifyRole("host", "admin", "teacher", "student"),addReview);
 router.post("/edit", verifyRole("host", "admin"), editSchool);
 router.get("/student/ownclub", verifyRole("student"), getStudentOwnClubs);
 router.get("/teacher/ownclubs", verifyRole("teacher"), getTeacherOwnClubs);
