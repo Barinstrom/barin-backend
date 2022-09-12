@@ -11,6 +11,10 @@ const ClubSchema = new Schema({
    groupID: {
       type: String,
       required: true,
+   }, // foreign key เชื่อม club เก่า
+   schoolID: {
+      type: String,
+      required: true,
    },
    category: {
       type: String,
@@ -28,7 +32,7 @@ const ClubSchema = new Schema({
       required: true,
    },
    schedule: [String],
-   reviews: [mongoose.ObjectId],
+   //reviews: [mongoose.ObjectId],
    picture: {
       pictureID: Number,
       urlPicture: String,

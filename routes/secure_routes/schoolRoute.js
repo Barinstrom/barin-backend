@@ -44,8 +44,8 @@ router.post(
    verifyRole("host", "admin", "teacher", "student"),
    updateReview
 );
-router.post("/edit", verifyRole("host", "admin"), editSchool);
-//router.post("/edit_admin", verifyRole("host", "admin"), editAdmin);
+router.patch("/edit", verifyRole("host", "admin"), editSchool);
+router.patch("/edit_admin", verifyRole("host", "admin"), editAdmin);
 router.get("/student/ownclub", verifyRole("student"), getStudentOwnClubs);
 router.get("/teacher/ownclubs", verifyRole("teacher"), getTeacherOwnClubs);
 router.get("/student/pastclubs", verifyRole("student"), getStudentPastClubs);

@@ -30,10 +30,10 @@ const StudentSchema = new Schema({
       default: "Pending",
    },
    tel: String,
-   reviews: [mongoose.ObjectId],
+   //reviews: [mongoose.ObjectId],
    // request.find({ _id: { $in: followedIDs } }) to query request
-   requests: [mongoose.ObjectId],
-   clubs: [
+   //requests: [mongoose.ObjectId],
+   clubs: [ // 6 record 
       {
          clubID: mongoose.ObjectId,
          status: {

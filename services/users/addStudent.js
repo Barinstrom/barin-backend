@@ -12,18 +12,19 @@ const addStudent = async (req, res) => {
          error: "email, firstname, lastname, schoolID is all required",
       });
    }
-   const schoolID = req.userInfo.schoolID;
-   const _user = await userModel.findOne({ email }).exec();
-   const _school = await schoolModel.findOne({ schoolID }).exec();
+   const schoolID = req.params.schoolID;
+   //const schoolID = req.userInfo.schoolID;
+   // const _user = await userModel.findOne({ email }).exec();
+   // const _school = await schoolModel.findOne({ schoolID }).exec();
    if (req.userInfo.role === "admin" && req.userInfo.schoolID !== schoolID) {
-      return res.status(401).send({ error: "this school is not your school" });
+      return res.status(401).send({ error: "This school is not your school" });
    }
-   if (_user) {
-      return res.status(400).send({ error: "email is already exist" });
-   }
-   if (!_school) {
-      return res.status(400).send({ error: "this school is not exist" });
-   }
+   // if (_user) {
+   //    return res.status(400).send({ error: "email is already exist" });
+   // }
+   // if (!_school) {
+   //    return res.status(400).send({ error: "this school is not exist" });
+   // }
    const characters =
       "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
    let password = "";
