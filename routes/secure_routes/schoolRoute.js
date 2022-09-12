@@ -27,8 +27,8 @@ router.post(
    verifyRole("host", "admin", "teacher", "student"),
    addReview
 );
-router.get("/ownclub", verifyRole("student"), getStudentOwnClubs);
 router.post("/edit", verifyRole("host", "admin"), editSchool);
+router.get("/student/ownclub", verifyRole("student"), getStudentOwnClubs);
 router.get("/teacher/ownclubs", verifyRole("teacher"), getTeacherOwnClubs);
 
 module.exports = router;
