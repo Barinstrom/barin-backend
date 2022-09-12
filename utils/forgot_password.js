@@ -19,8 +19,8 @@ const forgot_pass = (tomail, toname, resetCode) => {
         <h2>Hello ${toname}</h2>
         <p>Please enter the link to reset your password</p>
         <p>Link will expired next 15 minutes.</p>
-        <a href=${process.env.WEB_URL}/resetpassword/?token=${resetCode}> Click here</a>
-        </div>`,
+        <a href=http://localhost:3000/resetPass?token=${resetCode}> Click here</a>
+        </div>`,/
       },
       (err, info) => {
          if (err) {
