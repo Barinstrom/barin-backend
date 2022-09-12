@@ -21,6 +21,7 @@ const updateStudent = require("../../services/users/updateStudent");
 const updateTeacher = require("../../services/users/updateTeacher");
 const updateClub = require("../../services/users/updateClub");
 const deleteClubs = require("../../services/users/deleteClubs");
+const setSchedule = require("../../services/users/setSchedule");
 //router.use('/admin',verifyRole('admin'),adminRoute);
 
 router.get(
@@ -53,5 +54,6 @@ router.patch("/update-student", verifyRole("host", "admin"), updateStudent);
 router.patch("/update-teacher", verifyRole("host", "admin"), updateTeacher);
 router.patch("/update-club",verifyRole("teacher", "host", "admin"),updateClub);
 router.delete("/delete-clubs",verifyRole("host", "admin"), deleteClubs);
+router.patch("/set-schedule",verifyRole("host", "admin"), setSchedule);
 
 module.exports = router;

@@ -36,12 +36,12 @@ const schoolSchema = new Schema({
    },
    requests: [mongoose.ObjectId],
    clubs: [mongoose.ObjectId],
-   schedule: {
+   schedule: [{
       schoolYear: Number,
       registerDate: Date,
       endOfRegisterDate: Date,
       endOfSchoolYear: Date,
-   },
+   }],
    urlLogo: String,
    bgColor: String,
    adminID: [mongoose.ObjectId],
