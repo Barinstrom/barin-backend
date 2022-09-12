@@ -6,8 +6,7 @@ const addTeachers = async (req, res) => {
    let mergingTeacher = req,
       body; // array of object
    for (let i = 0; i < mergingTeacher.length; i++) {
-      const { email, schoolID, firstname, lastname, tel, clubs } =
-         mergingTeacher[i];
+      const { email, firstname, lastname, tel, clubs } = mergingTeacher[i];
       if ((!email, !firstname, !lastname, !schoolID)) {
          res.status(400).send({
             error: "email, firstname, lastname, schoolID is all required for all record",
