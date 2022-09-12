@@ -1,7 +1,7 @@
 const teacherModel = require("../../models/teacher");
 const userModel = require("../../models/user");
 
-//
+// /:school
 const addTeachers = async (req, res) => {
    let mergingTeacher = req,
       body; // array of object

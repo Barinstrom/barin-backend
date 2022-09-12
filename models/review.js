@@ -7,6 +7,10 @@ const ReviewSchema = new Schema({
       type: String,
       required: true,
    },
+   groupID: {
+      type: Number,
+      required: true,
+   },
 });
 
 ReviewSchema.plugin(mongoosePaginate);

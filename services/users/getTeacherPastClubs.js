@@ -1,11 +1,11 @@
-const StudentModel = require("../../models/student");
+const TeacherModel = require("../../models/teacher");
 const mongoose = require("mongoose");
 
-const getStudentPastClubs = async (req, res) => {
-    const student = await StudentModel.findOne({
+const getTeacherPastClubs = async (req, res) => {
+    const teacher = await TeacherModel.findOne({
         userID: new mongoose.mongo.ObjectId(req.userInfo._id),
     });
-    let clubsID = student.clubs;
+    let clubsID = teacher.clubs;
     let pastclubs = [];
     for (let i = 0; i < clubsID.length; i++) {
         if(clubsID[i].status != "Studying")
@@ -14,4 +14,4 @@ const getStudentPastClubs = async (req, res) => {
     res.json({ clubs: pastclubs });
 };
 
-module.exports = getStudentPastClubs;
+module.exports = getTeacherPastClubs;

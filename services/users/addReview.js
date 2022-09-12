@@ -27,7 +27,7 @@ const addReview = async (req, res) => {
    await clublModel
       .findByIdAndUpdate(clubID, { $set: { reviews: payloadClub } })
       .then(() => {
-         res.send("Add review in club success.");
+         res.send("Add review success.");
       })
       .catch((err) => {
          res.status(400).send(err);
