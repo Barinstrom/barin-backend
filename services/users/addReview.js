@@ -3,6 +3,11 @@ const reviewModel = require("../../models/review");
 const studentModel = require("../../models/student");
 
 const addReview = async (req, res) => {
+   //check school
+   const schoolID = req.params.schoolID;
+   if (req.userInfo.role !== "host" && req.userInfo.schoolID !== schoolID) {
+      return res.status(401).send({ error: "This school is not your school" });
+   }  
    // add review in reviews
    const textReview = { textReview: req.body.textReview };
    const review = new reviewModel(textReview);
