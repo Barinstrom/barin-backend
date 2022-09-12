@@ -11,61 +11,27 @@ const addReview = async (req, res) => {
 
    //หา student เพื่อไป add reviewID in student
    const studentID = req.body.studentID;
-   const student = await studentModel.findById(stdID);
+   const student = await studentModel.findOne({userID : studentID});
 
    // add reviewID in student
-   if (student.reviews) {
-      //ถ้านักเรียนมีรีวิวอยู่แล้ว
-      const payloadStudent = [...student.reviews, reviewID];
-      await studentModel
-         .findByIdAndUpdate(studentID, { $set: { reviews: payloadStudent } })
-         .then(() => {
-            res.send("Add review in student success.");
-         })
-         .catch((err) => {
-            res.status(400).send(err);
-         });
-   } else {
-      //ถ้านักเรียนยังไม่ได้รีวิว
-      const payloadStudent = [reviewID];
-      await studentModel
-         .findByIdAndUpdate(studentID, { $set: { reviews: payloadStudent } })
-         .then(() => {
-            res.send("Add review in student success.");
-         })
-         .catch((err) => {
-            res.status(400).send(err);
-         });
-   }
+   const payloadStudent = [...student.reviews, reviewID];
+   await studentModel.updateOne({userID : studentID}, { $set: { reviews: payloadStudent } });
+
 
    //หา club เพื่อไป add reviewID in club
    const clubID = req.body.clubID;
    const club = await clublModel.findById(clubID);
 
    // add reviewID in club
-   if (club.reviews) {
-      //ถ้าชุมนุมมีรีวิวอยู่แล้ว
-      const payloadClub = [...club.reviews, reviewID];
-      await clublModel
-         .findByIdAndUpdate(clubID, { $set: { reviews: payloadClub } })
-         .then(() => {
-            res.send("Add review in club success.");
-         })
-         .catch((err) => {
-            res.status(400).send(err);
-         });
-   } else {
-      //ถ้าชุมนุมยังไม่มีรีวิว
-      const payloadClub = [reviewID];
-      await clublModel
-         .findByIdAndUpdate(clubID, { $set: { reviews: payloadClub } })
-         .then(() => {
-            res.send("Add review in club success.");
-         })
-         .catch((err) => {
-            res.status(400).send(err);
-         });
-   }
+   const payloadClub = [...club.reviews, reviewID];
+   await clublModel
+      .findByIdAndUpdate(clubID, { $set: { reviews: payloadClub } })
+      .then(() => {
+         res.send("Add review in club success.");
+      })
+      .catch((err) => {
+         res.status(400).send(err);
+      });
 };
 
 module.exports = addReview;
