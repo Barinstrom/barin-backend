@@ -9,16 +9,17 @@ let transporter = nodemailer.createTransport({
    },
 });
 
-const sender = (tomail, toname, confirmationCode) => {
+const forgot_pass = (tomail, toname, resetCode) => {
    transporter.sendMail(
       {
          from: "Barin Admin <barinschool@hotmail.com>",
          to: `${toname} <${tomail}>`,
-         subject: "Activation Code",
-         html: `<h1>Email Confirmation</h1>
+         subject: "Reset Password",
+         html: `<h1>Email reset</h1>
         <h2>Hello ${toname}</h2>
-        <p>Thank you for subscribing. Please confirm your email by clicking on the following link</p>
-        <a href=${process.env.WEB_URL}/confirm/${confirmationCode}> Click here</a>
+        <p>Please enter the link to reset your password</p>
+        <p>Link will expired next 15 minutes.</p>
+        <a href=${process.env.WEB_URL}/resetpassword/?token=${resetCode}> Click here</a>
         </div>`,
       },
       (err, info) => {
@@ -32,5 +33,5 @@ const sender = (tomail, toname, confirmationCode) => {
 };
 
 module.exports = {
-   sender,
+   forgot_pass,
 };

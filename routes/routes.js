@@ -1,19 +1,14 @@
 const express = require("express");
 const router = express.Router();
-const bcrypt = require("bcryptjs");
-const validator = require("validator");
-const jwt = require("jsonwebtoken");
-const UserModel = require("../models/user");
-const SchoolModel = require("../models/school");
-const AdminModel = require("../models/admin");
-const userService = require("../services/users");
-const { cloudinary } = require("../utils/cloudinary");
-const { sender } = require("../utils/mail");
+const register = require("../services/users/unauth/register");
+const login = require("../services/users/unauth/login");
+const forgotpassword = require("../services/users/unauth/forgotpassword");
+const updatepassword = require("../services/users/unauth/updatepassword");
 const verifyUser = require("../middleware/verifyUser");
 
-const SALT_WORK_FACTOR = process.env.SALT_WORK_FACTOR;
 require("dotenv").config();
 
+<<<<<<< HEAD
 router.route("/register").post(async (req, res) => {
   const { email, password, confirmPassword,schoolID,schoolName, role, certificate_doc } =
     req.body;
@@ -82,30 +77,17 @@ router.route("/register").post(async (req, res) => {
     return res.status(400).send("user already exist");
   }
 
+=======
+router.get("/", (req, res) => {
+   res.send(
+      "Hello BARIN API you can see docs on https://barin-api-doc.vercel.app/ "
+   );
+>>>>>>> 3ddf97aba3401be000a5d3501bf0094f3c22b7b5
 });
-
-router.route("/login").post(async (req, res) => {
-  const { email, password } = req.body;
-  const _user = await userService.getUserByUsername(email);
-  if (_user) {
-    if (bcrypt.compareSync(password, _user.password)) {
-      const _userInfo = await userService.getUserWithoutPassword(_user._id);
-      if (_userInfo.status === "Active") {
-        const token = jwt.sign(_userInfo, process.env.SECRET, {
-          expiresIn: "1h",
-        });
-        return res.json({ success: true, token: token });
-      }
-      else {
-        return res.status(401).send("Email is not activated");
-      }
-    }
-  } else if (!email || !password) {
-    return res.status(400).send("Please enter email and password.");
-  }
-  return res.status(401).send("Email or password is not correct.");
-});
-
+router.post("/register", register);
+router.post("/login", login);
+router.post("/forgotpassword", forgotpassword);
+router.post("/updatepassword", updatepassword);
 router.get("/confirm/:confirmationCode", verifyUser);
 
 module.exports = router;

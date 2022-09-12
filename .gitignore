@@ -1,4 +1,6 @@
 node_modules
 .prettierrc
 .env
+.env.me
+.env.vault
 package-lock.json
