@@ -14,7 +14,6 @@ const ReviewSchema = new Schema({
    studentID: {
       type: mongoose.ObjectId,
       required: true,
-      unique: true,
    }, 
 });
 

@@ -2,7 +2,7 @@ const schoolModel = require("../../../models/school");
 //const { PaginationParameters } = require('mongoose-paginate-v2');
 
 const getNotapproveSchool = (req, res) => {
-   const query = { ...req.query, status: "not_approve" };
+   const query = { ...req.query.query, status: "not_approve" };
    const page = req.query.page || 1;
    const limit = 3;
    //{ color: "blue", published: true }, { page: 1, limit: 10, projection: { color: 1 } }
