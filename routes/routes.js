@@ -72,10 +72,10 @@ router.route("/register").post(async (req, res) => {
     sender(data.email, data.email, data.confirmationCode);
     return res.json({ success: true, data: _user });
   }
-  else if(!school){
+  else if(school){
     return res.status(400).send("SchoolID is already exist.");
   }
-  else if(!schoolByName){
+  else if(schoolByName){
     return res.status(400).send("Your school is already registered.");
   }
   else{

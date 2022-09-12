@@ -1,0 +1,7 @@
+// do something (function)
+
+const test =(req,res)=>{
+    res.send('testing')
+}
+
+module.exports = test;
