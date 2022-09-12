@@ -40,10 +40,7 @@ router.post("/update-review",verifyRole("host", "admin", "teacher", "student"),u
 router.post("/edit", verifyRole("host", "admin"), editSchool);
 router.get("/student/ownclub", verifyRole("student"), getStudentOwnClubs);
 router.get("/teacher/ownclubs", verifyRole("teacher"), getTeacherOwnClubs);
-<<<<<<< HEAD
 router.get("/student/pastclubs", verifyRole("student"), getStudentPastClubs);
-=======
 router.get("/get-school", verifyRole("host", "admin"), querySchool);
->>>>>>> 9895d67cfcefd357650c2075e4117e5a82195b77
 
 module.exports = router;
