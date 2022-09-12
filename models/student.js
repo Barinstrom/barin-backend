@@ -36,7 +36,11 @@ const StudentSchema = new Schema({
    clubs: [
       {
          clubID: mongoose.ObjectId,
-         status: String,
+         status: {
+            type: String,
+            enum: ["Pass", "Fail", "Studying"],
+            default: "Studying",
+         },
          studyYear: Number,
       },
    ],
