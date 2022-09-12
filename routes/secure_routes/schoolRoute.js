@@ -18,6 +18,7 @@ const addReview = require("../../services/users/addReview");
 const updateReview = require("../../services/users/updateReview");
 const getStudentOwnClubs = require("../../services/users/getStudentOwnClubs");
 const getTeacherOwnClubs = require("../../services/users/getTeacherOwnClubs");
+const getStudentPastClubs = require("../../services/users/getStudentPastClubs")
 const editSchool = require("../../services/users/system_admin/schoolEdit");
 const addTeacher = require("../../services/users/addTeacher");
 const addTeachers = require("../../services/users/addTeachers");
@@ -39,6 +40,10 @@ router.post("/update-review",verifyRole("host", "admin", "teacher", "student"),u
 router.post("/edit", verifyRole("host", "admin"), editSchool);
 router.get("/student/ownclub", verifyRole("student"), getStudentOwnClubs);
 router.get("/teacher/ownclubs", verifyRole("teacher"), getTeacherOwnClubs);
+<<<<<<< HEAD
+router.get("/student/pastclubs", verifyRole("student"), getStudentPastClubs);
+=======
 router.get("/get-school", verifyRole("host", "admin"), querySchool);
+>>>>>>> 9895d67cfcefd357650c2075e4117e5a82195b77
 
 module.exports = router;
