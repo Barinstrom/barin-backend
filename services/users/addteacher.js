@@ -4,6 +4,7 @@ const schoolModel = require("../../models/school");
 const { sender } = require("../../utils/mail");
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const addTeacher = async (req, res) => {
    const { email, schoolID, firstname, lastname, tel, clubs } = req.body;
    const clubsID = clubs.map((el) => {
