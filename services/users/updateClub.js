@@ -14,7 +14,7 @@ const updateClub = async (req, res) => {
    }
    await ClubModel.findByIdAndUpdate(clubID, {$set: payload})
    .then(() => {
-      res.send("Edit club success.");
+      res.send({success: true});
    })
    .catch((err) => {
       res.status(400).send(err);
