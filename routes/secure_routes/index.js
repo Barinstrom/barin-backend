@@ -12,9 +12,9 @@ const verifyRole = require("../../middleware/verifyRole");
 router.use(verifyToken);
 //const profile = require("./users/profile");
 
-router.post("/schools/approved", verifyRole("host"), getApprovedSchool);
-router.post("/schools/pending", verifyRole("host"), getPendingSchool);
-router.post("/schools/not-approved", verifyRole("host"), getNotApprovedSchool);
+router.get("/schools/approved", verifyRole("host"), getApprovedSchool);
+router.get("/schools/pending", verifyRole("host"), getPendingSchool);
+router.get("/schools/not-approved", verifyRole("host"), getNotApprovedSchool);
 
 router.use("/:schoolID", verifySchool, schoolRoute);
 

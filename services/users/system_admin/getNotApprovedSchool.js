@@ -1,11 +1,10 @@
 const schoolModel = require("../../../models/school");
 //const { PaginationParameters } = require('mongoose-paginate-v2');
 
-const getPendingSchool = (req, res) => {
-   const query = { ...req.body.query, status: "not_approve" };
-   const page = req.body.page || 1;
-   const limit = 1;
-   console.log(req.body);
+const getNotapproveSchool = (req, res) => {
+   const query = { ...req.query, status: "not_approve" };
+   const page = req.query.page || 1;
+   const limit = 3;
    //{ color: "blue", published: true }, { page: 1, limit: 10, projection: { color: 1 } }
    schoolModel
       .paginate(query, { page, limit })
@@ -17,4 +16,4 @@ const getPendingSchool = (req, res) => {
       });
 };
 
-module.exports = getPendingSchool;
+module.exports = getNotapproveSchool;
