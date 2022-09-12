@@ -1,12 +1,12 @@
 const reviewModel = require("../../models/review");
 
 const updateReview = async (req, res) => {
-   //check school
-   const schoolID = req.params.schoolID;
-   if (req.userInfo.role !== "host" && req.userInfo.schoolID !== schoolID) {
-      return res.status(401).send({ error: "This school is not your school" });
-   }  
    const reviewID = req.body.reviewID;
+   const review = await reviewModel.findById(reviewID)
+   if(!review)
+   {
+      return res.status(400).send("Invalid reviewID")
+   }
    // update review
    await reviewModel.findByIdAndUpdate(reviewID , { $set: { textReview : req.body.textReview } })
       .then(() => {

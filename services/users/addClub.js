@@ -2,20 +2,17 @@ const clubModel = require("../../models/club");
 const teacherModel = require("../../models/teacher");
 
 const addClub = async (req, res) => {
-   //check school
-   const schoolID = req.params.schoolID;
-   if (req.userInfo.role !== "host" && req.userInfo.schoolID !== schoolID) {
-      return res.status(401).send({ error: "This school is not your school" });
-   }  
-
+   const schoolID = req.userInfo.schoolID;
+   
    //check club name
    if (await clubModel.findOne({ clubName: req.body.clubName }))
       return res.status(400).send({ error: "Club name is already exists." });
 
    const payloadClub = req.body;
+   payloadClub["schoolID"] = schoolID;
    const teacherID = req.body.teacherID;
    delete payloadClub["teacherID"];
-
+   
    //add new club
    const club = new clubModel(payloadClub);
    const newClub = await club.save();
