@@ -8,9 +8,14 @@ const ReviewSchema = new Schema({
       required: true,
    },
    groupID: {
-      type: Number,
+      type: String,
       required: true,
    },
+   studentID: {
+      type: mongoose.ObjectId,
+      required: true,
+      unique: true,
+   }, 
 });
 
 ReviewSchema.plugin(mongoosePaginate);

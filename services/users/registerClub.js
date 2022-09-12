@@ -9,6 +9,7 @@ const registerClub = async (req, res) => {
     //เช็คว่าเกิน limit ของ club มั้ย
 
     //ลงทะเบียน club 
+
    
 };
 
