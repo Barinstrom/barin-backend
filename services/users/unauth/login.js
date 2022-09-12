@@ -13,7 +13,11 @@ const login = async (req, res) => {
             const token = jwt.sign(_userInfo, process.env.SECRET, {
                expiresIn: "1h",
             });
-            return res.json({ success: true, token: token });
+            return res.json({
+               success: true,
+               token: token,
+               schoolID: _user.schoolID,
+            });
          } else {
             return res.status(401).send("Email is not activated");
          }
