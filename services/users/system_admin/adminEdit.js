@@ -3,45 +3,47 @@ const adminModel = require("../../../models/admin");
 const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
 
-const editAdmin = (req, res) => {
+const editAdmin = async (req, res) => {
    const values = ({ _id, email, password, tel } = req.body);
    const hashPassword = bcrypt.hashSync(values.password, 10);
-   const result = []
-   
+   const obj_id = new mongoose.mongo.ObjectId(values._id);
+   let update_email_password = 0
+   let update_tel = 0
 
    if (req.userInfo.role !== "host") {
-    return res.status(401).send({ error: "You doesn't have access to do that" });
-    }  
+      return res.status(401).send({ error: "You doesn't have access to do that" });
+   }  
 
-   const obj_id = new mongoose.mongo.ObjectId(values._id);
-   userModel
-      .findOneAndUpdate({ _id: obj_id }, { $set: { 
+   await userModel.findOneAndUpdate({ _id: obj_id }, { $set: { 
       email: values.email,
       password: hashPassword} })
       .then(() => {
-         result.push("admin updated email or password successfully")
+         update_email_password = 1
       })
       .catch((err) => {
-         res.json({
-            message: "Error updating school"
-         });
+         console.log("test")
+         update_email_password = 0
       });
     
-    adminModel
-      .findOneAndUpdate({ userID: obj_id }, { $set: { 
+   await adminModel.findOneAndUpdate({ userID: obj_id }, { $set: { 
       tel: values.tel} })
       .then((result) => {
-         result.push("update telephone success")
-         res.json({
-            message: "update telephone success"
-         });
+         update_tel = 1
       })
       .catch((err) => {
-         res.json({
-            message: "Error updating telephone"
-         });
+         update_tel = 0
       });
+
+   console.log(update_email_password)
+      if (!update_email_password)
+         return res.json({message: "update email or password fail"});
+      if (!update_tel)
+         return res.json({message: "update telephone fail"});
+
+      return res.json({message: "update success"});
 };
+
+
 
 module.exports = editAdmin;
 

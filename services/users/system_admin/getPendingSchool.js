@@ -4,11 +4,8 @@ const schoolModel = require("../../../models/school");
 const getPendingSchool = (req, res) => {
 
    let tmp = ""
-   if (!req.query.query){
-      tmp = ""
-   }else{
+   if (req.query.query)
       tmp = new RegExp("^" + req.query.query );
-   }
    const query = {
       schoolID: {$regex: tmp ,$options:'i'},
       status: "pending"
