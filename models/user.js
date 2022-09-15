@@ -24,6 +24,7 @@ const userSchema = new Schema({
    },
    role: {
       type: String,
+      enum: ["host", "admin", "teacher", "student"],
       required: [true, "role required !"],
    },
    status: {

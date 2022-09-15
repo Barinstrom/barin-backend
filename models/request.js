@@ -10,7 +10,6 @@ const RequestSchema = new Schema({
    studentID: {
       type: mongoose.ObjectId,
       required: true,
-      unique: true,
    }, 
    detail: {
       type: String,

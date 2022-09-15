@@ -17,6 +17,7 @@ const login = async (req, res) => {
                success: true,
                token: token,
                schoolID: _user.schoolID,
+               role: _user.role,
             });
          } else {
             return res.status(401).send("Email is not activated");

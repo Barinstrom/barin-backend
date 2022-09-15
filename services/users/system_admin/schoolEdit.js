@@ -11,6 +11,10 @@ const schoolEdit = (req, res) => {
       return res.status(401).send({ error: "You doesn't have access to do that" });
    }  
    
+   if (req.userInfo.role === "admin" && req.userInfo.schoolID !== schoolID) {
+      return res.status(401).send({ error: "This school is not your school" });
+   }
+   
    schoolModel
       .findOneAndUpdate({ schoolID: values.schoolID }, {$set: values})
       .then(() => {

@@ -2,13 +2,13 @@ const clubModel = require("../../models/club");
 const teacherModel = require("../../models/teacher");
 
 const addClub = async (req, res) => {
-   const schoolID = req.userInfo.schoolID;
-   
    //check club name
    if (await clubModel.findOne({ clubName: req.body.clubName }))
       return res.status(400).send({ error: "Club name is already exists." });
 
+   //เตรียม payloadClub
    const payloadClub = req.body;
+   const schoolID = req.userInfo.schoolID;
    payloadClub["schoolID"] = schoolID;
    const teacherID = req.body.teacherID;
    delete payloadClub["teacherID"];
