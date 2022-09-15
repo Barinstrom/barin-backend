@@ -9,11 +9,11 @@ const updateSchedule = async (req, res) => {
     {
         return res.send("Invalid schoolID")
     }
-    for(let i=0;i<school.schedule.length;i++)
-    {
-        if(req.body.schoolYear == school.schedule[i].schoolYear)
-            return res.send("Invalid schoolYear")
-    }
+    // for(let i=0;i<school.schedule.length;i++)
+    // {
+    //     if(req.body.schoolYear == school.schedule[i].schoolYear)
+    //         return res.send("Invalid schoolYear")
+    // }
     
     const addSchedule = {
         "schoolYear": req.body.schoolYear,
