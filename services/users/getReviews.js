@@ -8,7 +8,7 @@ const getReviews = async (req, res) => {
     const groupID = club.groupID;
 
     //query สำหรับ paginate
-    const query = { ...req.query.query, groupID: groupID };
+    const query = { groupID: groupID };
     const page = req.query.page || 1;
     const limit = 3;
 
