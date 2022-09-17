@@ -14,7 +14,7 @@ const addStudents = async (req, res) => {
          enteredYear,
          classYear,
          isActive,
-         tel = "",
+         tel = "EMPTY",
       } = mergingStudent[i];
       if (
          (!email, !firstname, !lastname, !enteredYear, !classYear, !isActive)
@@ -68,7 +68,7 @@ const addStudents = async (req, res) => {
                enteredYear,
                classYear,
                isActive,
-               tel,
+               tel = "EMPTY",
             } = mergingStudent[i];
             // const clubsID = clubs.map((el) => {
             //    return new mongoose.mongo.ObjectId(el);
@@ -99,7 +99,7 @@ const addStudents = async (req, res) => {
             enteredYear,
             classYear,
             isActive,
-            tel,
+            tel = "EMPTY",
          } = mergingStudent[i];
          const characters =
             "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";

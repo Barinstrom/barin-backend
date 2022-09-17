@@ -9,8 +9,8 @@ let transporter = nodemailer.createTransport({
    },
 });
 
-const sender = (tomail, toname, confirmationCode) => {
-   transporter.sendMail(
+const sender = async (tomail, toname, confirmationCode) => {
+   await transporter.sendMail(
       {
          from: "Barin Admin <barinschool@hotmail.com>",
          to: `${toname} <${tomail}>`,
@@ -29,6 +29,7 @@ const sender = (tomail, toname, confirmationCode) => {
          }
       }
    );
+   await transporter.close();
 };
 
 module.exports = {

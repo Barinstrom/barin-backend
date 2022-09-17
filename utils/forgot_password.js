@@ -9,8 +9,8 @@ let transporter = nodemailer.createTransport({
    },
 });
 
-const forgot_pass = (tomail, toname, resetCode) => {
-   transporter.sendMail(
+const forgot_pass = async (tomail, toname, resetCode) => {
+   await transporter.sendMail(
       {
          from: "Barin Admin <barinschool@hotmail.com>",
          to: `${toname} <${tomail}>`,
@@ -30,6 +30,7 @@ const forgot_pass = (tomail, toname, resetCode) => {
          }
       }
    );
+   await transporter.close();
 };
 
 module.exports = {
