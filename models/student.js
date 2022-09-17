@@ -26,14 +26,15 @@ const StudentSchema = new Schema({
    },
    isActive: {
       type: String,
-      enum: ["Not-active", "Active"],
+      enum: ["Not-active", "Active", "Pending"],
       default: "Pending",
    },
    tel: String,
    //reviews: [mongoose.ObjectId],
    // request.find({ _id: { $in: followedIDs } }) to query request
    //requests: [mongoose.ObjectId],
-   clubs: [ // 6 record 
+   clubs: [
+      // 6 record
       {
          clubID: mongoose.ObjectId,
          status: {
