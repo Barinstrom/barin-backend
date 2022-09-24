@@ -27,6 +27,10 @@ const ClubSchema = new Schema({
       type: Number,
       required: true,
    },
+   isFull: {
+      type: Boolean,
+      default: false
+   },
    schoolYear: {
       type: Number,
       required: true,

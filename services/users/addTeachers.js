@@ -29,11 +29,11 @@ const addTeachers = async (req, res) => {
          },
          {
             $lookup: {
-               from: "teachers",
-               localField: "_id",
-               foreignField: "userID",
-               as: "teacher",
-            },
+               from: "teachers", // ตารางที่อยาก join
+               localField: "_id", // user
+               foreignField: "userID", // teacher
+               as: "teacher", // ชื่อผลลัพท์
+            }, // [{... userData, teacher:{userID:[objectID]}},...]
          },
          { $unwind: "$teacher" },
          {

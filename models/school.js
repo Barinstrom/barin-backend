@@ -42,6 +42,10 @@ const schoolSchema = new Schema({
       endOfRegisterDate: Date,
       endOfSchoolYear: Date,
    }],
+   nowSchoolYear:{
+      type: Number,
+      default: 0,
+   },
    urlLogo: String,
    bgColor: String,
    adminID: [mongoose.ObjectId],
