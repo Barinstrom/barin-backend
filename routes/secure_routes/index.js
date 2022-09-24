@@ -15,8 +15,14 @@ router.use(verifyToken);
 router.get("/schools/approved", verifyRole("host"), getApprovedSchool);
 router.get("/schools/pending", verifyRole("host"), getPendingSchool);
 router.get("/schools/not-approved", verifyRole("host"), getNotApprovedSchool);
-
+router.get('/school/get-status',async (req,res)=>{
+   const _school = await SchoolModel.findOne({
+      schoolID: req.userInfo.schoolID,
+   });
+   res.send(_school);
+})
 // เพิ่ม จ่ายเงิน กับ ดูสถานะโรงเรียนไม่ต้องมี /:schoolID
+
 router.use("/:schoolID", verifySchool, schoolRoute);
 
 router.get("/", (req, res) => {

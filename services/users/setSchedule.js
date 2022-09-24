@@ -5,7 +5,7 @@ const updateSchedule = async (req, res) => {
     const schoolID = req.userInfo.schoolID;
     const school = await SchoolModel.findOne({schoolID:schoolID});
     const schoolYear = req.body.schoolYear;
-    nowYear = new Date().getFullYear();
+    nowYear = school.paymentDate.getFullYear();
     // frontend เตือน user บอกว่าถ้าพังให้ติดต่อ host แก้ใน db
     if(schoolYear>nowYear+1 || schoolYear<nowYear-1){
         return res.status(400).send({'success':false,'message':'year is invalid'})
