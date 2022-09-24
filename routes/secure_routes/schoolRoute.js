@@ -3,8 +3,6 @@ const router = express.Router();
 
 const verifyRole = require("../../middleware/verifyRole");
 
-const queryUser = require("../../services/users/queryUser");
-const querySchool = require("../../services/users/querySchool");
 const queryData = require("../../services/users/queryData");
 const addClub = require("../../services/users/addClub");
 const registerClub = require("../../services/users/registerClub");
