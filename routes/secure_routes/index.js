@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const schoolRoute = require("./schoolRoute");
+const SchoolModel = require('../../models/school');
 const getApprovedSchool = require("../../services/users/system_admin/getApprovedSchool");
 const getPendingSchool = require("../../services/users/system_admin/getPendingSchool");
 const getNotApprovedSchool = require("../../services/users/system_admin/getNotApprovedSchool");
