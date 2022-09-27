@@ -10,7 +10,7 @@ const calculateOrderAmount = (items) => {
 
 const getIntent = async (req, res) => {
    const { items } = req.body;
-   const school = SchoolModel.findOne({
+   const school = await SchoolModel.findOne({
       schoolID: req.userInfo.schoolID,
    }).exec();
    if (school.paymentStatus == "success") {
@@ -27,7 +27,7 @@ const getIntent = async (req, res) => {
       // },
       payment_method_types: ["promptpay"],
    });
-   await school.updateOne({
+   const updated = await school.updateOne({
       paymentIntentId: paymentIntent.id,
    });
 

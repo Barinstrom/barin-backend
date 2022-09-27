@@ -5,6 +5,11 @@ const payment = async (req, res) => {
    const school = await SchoolModel.findOne({
       schoolID: req.userInfo.schoolID,
    }).exec();
+   if (school.paymentStatus == "success") {
+      return res
+         .status(400)
+         .json({ success: false, message: "You had already paid." });
+   }
 
    // verify paymentIntent
    const paymentIntent = await stripe.paymentIntents.retrieve(
