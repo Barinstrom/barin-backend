@@ -24,12 +24,12 @@ const payment = async (req, res) => {
       });
       return res.status(200).json({ success: true });
    } else if (status == "processing") {
-      return res.status(400).json({ success: false, message: "processing" });
+      return res.status(200).json({ success: false, message: "processing" });
    } else if (status == "requires_payment_method") {
-      return res.status(400).json({ success: false, message: "not success" });
+      return res.status(200).json({ success: false, message: "not success" });
    } else {
       return res
-         .status(400)
+         .status(200)
          .json({ success: false, message: "something went wrong" });
    }
 };
