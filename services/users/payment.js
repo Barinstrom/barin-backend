@@ -7,7 +7,7 @@ const payment = async (req, res) => {
    }).exec();
    if (school.paymentStatus == "success") {
       return res
-         .status(400)
+         .status(200)
          .json({ success: false, message: "You had already paid." });
    }
 
