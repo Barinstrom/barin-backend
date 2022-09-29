@@ -15,6 +15,10 @@ const ReviewSchema = new Schema({
       type: mongoose.ObjectId,
       required: true,
    }, 
+   schoolYear: {
+      type: Number,
+      required: true,
+   }
 });
 
 ReviewSchema.plugin(mongoosePaginate);

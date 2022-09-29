@@ -38,22 +38,10 @@ router.post("/add-student", verifyRole("host", "admin"), addStudent);
 router.post("/add-students", verifyRole("host", "admin"), addStudents);
 router.post("/add-teacher", verifyRole("host", "admin"), addTeacher);
 router.post("/add-teachers", verifyRole("host", "admin"), addTeachers);
-router.post(
-   "/add-review",
-   verifyRole("host", "admin", "teacher", "student"),
-   addReview
-);
+router.post("/add-review", verifyRole("student"), addReview);
 router.post("/register-club", verifyRole("student"), registerClub);
-router.patch(
-   "/update-review",
-   verifyRole("host", "admin", "teacher", "student"),
-   updateReview
-);
-router.get(
-   "/get-review",
-   verifyRole("host", "admin", "teacher", "student"),
-   getReview
-);
+router.patch("/update-review", verifyRole("student"), updateReview); //not use
+router.get("/get-review", verifyRole("host", "admin", "teacher", "student"), getReview);
 router.get(
    "/clubs",
    verifyRole("host", "admin", "teacher", "student"),
