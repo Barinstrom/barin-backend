@@ -100,11 +100,11 @@ const getSchoolStudent = async (req, res) => {
     ])
     .exec(); 
 
-    let docs = []
+    let docs = [];
     for(let i=0;i<_docs.length;i++){
         let tmp1 = _docs[i].student;
-        console.log('asfghj', tmp1)
-        docs.push(tmp1)
+        console.log('asfghj', tmp1);
+        docs.push(tmp1);
     }
 
     res.send({docs,totalDocs,limit,totalPages,page,pagingCounter,hasPrevPage,hasNextPage,prevPage,nextPage});

@@ -38,15 +38,18 @@ const registerClub = async (req, res) => {
     const _student = await studentModel.findOne({userID: new mongoose.mongo.ObjectId(req.userInfo._id) });
     let study_history = _student.clubs.sort((a,b) => b.schoolYear - a.schoolYear);
     let study_now = study_history[0];
-    if(study_now.studyYear > schoolYear){
-        return res.status(409).send({
-            'success':false,
-            'error':'schoolYear and newest studyYear of study is conflict'});
-    }
-    if(study_now.studyYear === schoolYear && study_now.clubID){
-        return res.status(400).send({
-            'success':false,
-            'error':'you already registered'});
+    console.log("ggggg",study_now);
+    if(study_now){
+        if(study_now.studyYear > schoolYear){
+            return res.status(409).send({
+                'success':false,
+                'error':'schoolYear and newest studyYear of study is conflict'});
+        }
+        if(study_now.studyYear === schoolYear && study_now.clubID){
+            return res.status(400).send({
+                'success':false,
+                'error':'you already registered'});
+        }
     }
     // OK to register
     // update student ใส่ตรงๆเลย ส่วนการถอนจะการลบตัวแรกออก (เหมือนลบออกแล้วใส่ใหม่)
