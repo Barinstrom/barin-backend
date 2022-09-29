@@ -1,7 +1,6 @@
 const userModel = require('../../models/user');
-const studentModel = require('../../models/student');
 
-const getSchoolStudent = async (req, res) => {
+const getSchoolTeacher = async (req, res) => {
     const page = req.query.page || 1;
     const limit = 1;
     let tmp = ""
@@ -15,23 +14,23 @@ const getSchoolStudent = async (req, res) => {
                 // {role:"teacher"}
                 {
                    $and: [
-                      { role: "student" },
+                      { role: "teacher" },
                       { schoolID: req.userInfo.schoolID },
                    ],
                 },
           },
           {
              $lookup: {
-                from: "students", // ตารางที่อยาก join
+                from: "teachers", // ตารางที่อยาก join
                 localField: "_id", // user
-                foreignField: "userID", // student
-                as: "student", // ชื่อผลลัพท์
-             }, // [{... userData, student:{userID:[objectID]}},...]
+                foreignField: "userID", // teacherID
+                as: "teacher", // ชื่อผลลัพท์
+             }, // [{... userData, teacher:{userID:[objectID]}},...]
           },
-          { $unwind: "$student" },
+          { $unwind: "$teacher" },
           {
              $match: {
-                "student.firstname" : {$regex: tmp ,$options:'i'},
+                "teacher.firstname" : {$regex: tmp ,$options:'i'},
              },
           },
           {
@@ -46,7 +45,6 @@ const getSchoolStudent = async (req, res) => {
          ] */
 
     let count = temp[0].count;
-    console.log(count);
 
     const totalDocs = count;
     const totalPages = Math.ceil( count/limit );
@@ -69,23 +67,23 @@ const getSchoolStudent = async (req, res) => {
              // {role:"teacher"}
              {
                 $and: [
-                   { role: "student" },
+                   { role: "teacher" },
                    { schoolID: req.userInfo.schoolID },
                 ],
              },
        },
        {
           $lookup: {
-             from: "students", // ตารางที่อยาก join
+             from: "teachers", // ตารางที่อยาก join
              localField: "_id", // user
-             foreignField: "userID", // student
-             as: "student", // ชื่อผลลัพท์
-          }, // [{... userData, student:{userID:[objectID]}},...]
+             foreignField: "userID", // teacher
+             as: "teacher", // ชื่อผลลัพท์
+          }, // [{... userData, teacher:{userID:[objectID]}},...]
        },
-       { $unwind: "$student" },
+       { $unwind: "$teacher" },
        {
           $match: {
-             "student.firstname" : {$regex: tmp ,$options:'i'},
+             "teacher.firstname" : {$regex: tmp ,$options:'i'},
           },
        },
        { $sort: {
@@ -100,14 +98,13 @@ const getSchoolStudent = async (req, res) => {
     ])
     .exec(); 
 
-    let docs = [];
+    let docs = []
     for(let i=0;i<_docs.length;i++){
-        let tmp1 = _docs[i].student;
-        console.log('asfghj', tmp1);
-        docs.push(tmp1);
+        let tmp1 = _docs[i].teacher;
+        docs.push(tmp1)
     }
 
     res.send({docs,totalDocs,limit,totalPages,page,pagingCounter,hasPrevPage,hasNextPage,prevPage,nextPage});
 }
 
-module.exports = getSchoolStudent;
+module.exports = getSchoolTeacher;

@@ -42,9 +42,12 @@ const updateSchedule = async (req, res) => {
         }
         if(schedule[i].schoolYear === schoolYear){
             isold = true;
+            newSchedule = [addSchedule,...newSchedule];
         }
         //newSchedule.push(schedule[i]);
-        newSchedule = [schedule[i],...newSchedule];
+        else{
+            newSchedule = [schedule[i],...newSchedule];
+        }
     }
     if(!isold){
         newSchedule = [addSchedule,...newSchedule];

@@ -33,7 +33,14 @@ const register = async (req, res) => {
       upload_preset: "certificate_doc",
       public_id: email,
    });
+   const logoDefault = "https://files.tawanchai.com/pic/promma.png";
+   const uploadLogo = await cloudinary.uploader.upload(logoDefault, {
+      upload_preset: "urlLogo",
+      public_id: email,
+   });
+
    const url_doc = uploadedRes.secure_url;
+   const urlLogo = uploadLogo.secure_url;
 
    const token = jwt.sign({ email: email }, process.env.SECRET, {
       expiresIn: "7d",
@@ -50,7 +57,8 @@ const register = async (req, res) => {
          paymentStatus: "pending",
          status: "pending", // 0=pending -1=reject 1=approve
          paymentDate: new Date(),
-         schedule: []
+         schedule: [],
+         urlLogo,
          // request , club , schedule urllog bgcolor => null at this point
       };
       await SchoolModel.create(schoolData);
