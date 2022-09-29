@@ -9,7 +9,7 @@ const getStudentPastClubs = async (req, res) => {
     let pastclubs = [];
     for (let i = 0; i < clubsID.length; i++) {
         if(clubsID[i].status != "Studying")
-            pastclubs.push(clubsID[i]);
+            pastclubs.push(clubsID[i].clubID);
     }
     res.json({ clubs: pastclubs });
 };
