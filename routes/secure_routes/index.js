@@ -23,7 +23,8 @@ router.get("/school/get-status", async (req, res) => {
    const _school = await SchoolModel.findOne({
       schoolID: req.userInfo.schoolID,
    });
-   res.send(_school);
+   const result = {..._school,role:req.userInfo.role}
+   res.send(result);
 });
 router.get("/get-intent", verifyRole("admin"), getIntent);
 router.get("/payment", verifyRole("admin"), payment);
