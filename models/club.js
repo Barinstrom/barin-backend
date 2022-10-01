@@ -6,7 +6,6 @@ const ClubSchema = new Schema({
    clubName: {
       type: String,
       required: true,
-      unique: true,
    },
    groupID: {
       type: String,
