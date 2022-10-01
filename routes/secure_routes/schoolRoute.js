@@ -6,6 +6,7 @@ const verifyRole = require("../../middleware/verifyRole");
 const queryData = require("../../services/users/queryData");
 const addClub = require("../../services/users/addClub");
 const registerClub = require("../../services/users/registerClub");
+const dropClub = require('../../services/users/dropClub');
 const addReview = require("../../services/users/addReview");
 const updateReview = require("../../services/users/updateReview");
 const getReview = require("../../services/users/getReviews");
@@ -40,6 +41,7 @@ router.post("/add-teacher", verifyRole("host", "admin"), addTeacher);
 router.post("/add-teachers", verifyRole("host", "admin"), addTeachers);
 router.post("/add-review", verifyRole("student"), addReview);
 router.post("/register-club", verifyRole("student"), registerClub);
+router.post("/drop-club", verifyRole("student"), dropClub);
 router.patch("/update-review", verifyRole("student"), updateReview); //not use
 router.get("/get-review", verifyRole("host", "admin", "teacher", "student"), getReview);
 router.get(

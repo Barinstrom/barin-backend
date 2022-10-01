@@ -1,0 +1,140 @@
+const studentModel = require("../../models/student");
+const schoolModel = require('../../models/school');
+const clubModel = require("../../models/club");
+const logsModel = require('../../models/registerLogs');
+const mongoose = require('mongoose'); 
+
+/*
+    req.body = {
+        clubID: ObjectId
+    }
+    
+    identity ของ user,role,school จะใช้ใน token
+
+    (ตอนขอชุมนุม) ปีการศึกษาจะถือว่าใช้ปีล่าสุดให้โดยอัตโนมัติ frontend ส่งปีไม่ล่าสุดมาจะพัง
+    (เช็คทุกอย่างเทียบกับปีล่าสุดในโรงเรียน,นักเรียน,ชุมนุม)
+
+    NOTE: พอทำอันนี้แล้วคิดขึ้นมาได้ว่า อย่าลืมแก้ verifySchool ให้ 400 กับ โรงเรียนที่ไม่จ่ายเงิน
+         รวมถึงเช็คเวลาจ่ายเงินใน verifyschool ด้วยเลย
+
+*/
+const dropClub = async (req, res) => {
+
+    //เช็คว่า schedule ของ school อยู่ใน registerDate มั้ย
+    const _school = await schoolModel.findOne({schoolID: req.userInfo.schoolID}).exec();
+    // มี _school แน่ๆ เพราะหาตอน verifySchool
+    let now = new Date().getTime();
+    // get newest schedule
+    let schedule = _school.schedule.sort((a,b) => b.schoolYear - a.schoolYear);
+    let schedule_now = schedule[0];
+    const schoolYear = schedule_now.schoolYear;
+    if(now>schedule_now.endOfRegisterDate.getTime() || now<schedule_now.registerDate.getTime()){
+        return res.status(400).send({
+            'success':false,
+            'error':'not in register time'});
+    }
+
+    //เช็คว่า student ต้องมีชุมนุมแล้วในปีปัจจุบัน => 
+    const _student = await studentModel.findOne({userID: new mongoose.mongo.ObjectId(req.userInfo._id)});
+    let study_history = _student.clubs.sort((a,b) => b.schoolYear - a.schoolYear);
+    let study_now = study_history[0];
+    // console.log("ggggg",study_now);
+    // console.log("ggggg2",!(study_now.studyYear === schoolYear && study_now.clubID));
+
+    if(study_now){
+        if(study_now.studyYear > schoolYear){
+            return res.status(409).send({
+                'success':false,
+                'error':'schoolYear and newest studyYear of study is conflict'});
+        }
+        const check = !(study_now.studyYear === schoolYear && study_now.clubID);
+        console.log("asdfghjuytfvbnhytrdc ",check);
+        if(check){
+            return res.status(400).send({
+                'success':false,
+                'error':'you didn\'t enroll in any club in this year yet'});
+        }
+        if(req.body.clubID !== study_now.clubID.toString()){
+            return res.status(400).send({
+                'success':false,
+                'error':'you didn\'t enroll in this club'});
+        }
+    }
+    else{
+        return res.status(400).send({
+            'success':false,
+            'error':'you didn\'t enroll in any club in this year yet'});
+    }
+    // OK to register
+    // update student ใส่ตรงๆเลย ส่วนการถอนจะการลบตัวแรกออก (เหมือนลบออกแล้วใส่ใหม่)
+
+    //เช็คว่าเกิน limit ของ club มั้ย
+    const _club = await clubModel.findById(req.body.clubID);
+    if(!_club){
+        return res.status(400).send({
+            'success':false,
+            'error':'this club doesn\'t exist'});
+    }
+    if(_club.schoolID !== req.userInfo.schoolID){
+        return res.status(400).send({
+            'success':false,
+            'error':'this club is not in your school'});
+    }
+    // console.log(_club._id,study_now.clubID);
+    // console.log(_club._id !== study_now.clubID);
+    // if(_club._id !== study_now.clubID){
+    //     return res.status(400).send({
+    //         'success':false,
+    //         'error':'you didn\'t enroll in this club'});
+    // }
+    // check log
+    const all_action = logsModel.find({clubID: new mongoose.mongo.ObjectId(req.body.clubID)});
+    let count = 0;
+    for(let i=0;i<all_action.length;i++){
+        if(all_action[i].action === 'register'){
+            count++;
+        }
+        else{
+            count--;
+        }
+    }
+    // if(count>_club.limit){
+    //     return res.status(400).send({
+    //         'success':false,
+    //         'error':'this club full'})
+    // }
+
+    //ถอน club 
+    await logsModel.create({
+        studentID: req.userInfo._id,
+        clubID: _club._id,
+        action: 'drop',
+        date: new Date(),
+    })
+
+    // const new_club_study_data = {
+    //     clubID: _club._id,
+    //     status: "Studying",
+    //     studyYear: schoolYear,
+    // }
+    const old_len = study_history.length;
+    const new_study_history = study_history.slice(1,old_len);
+    _student.clubs = new_study_history;
+    // console.log(_student.clubs,new_study_history,new_club_study_data);
+    await _student.save();
+
+    if(count-1>=_club.limit){
+        _club.isFull = true;
+        await _club.save();
+    }
+    else{
+        _club.isFull = false;
+        await _club.save();
+    }
+
+    res.send({'success':true});
+
+};
+
+module.exports = dropClub;
+
