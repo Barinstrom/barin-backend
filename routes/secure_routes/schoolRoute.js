@@ -50,12 +50,12 @@ router.get(
    getSchoolClubs
 );
 router.get(
-   "/student",
+   "/students",
    verifyRole("host", "admin", "teacher", "student"),
    getSchoolStudent
 );
 router.get(
-    "/teacher",
+    "/teachers",
     verifyRole("host", "admin", "teacher", "student"),
     getSchoolTeacher
  );
