@@ -20,6 +20,7 @@ const getApprovedSchool = (req, res) => {
          res.send(result);
       })
       .catch((err) => {
+         res.json({success:false,message: "update email or password fail"});
          res.status(400).send("paginate error");
       });
 };

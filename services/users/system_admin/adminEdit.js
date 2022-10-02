@@ -11,7 +11,7 @@ const editAdmin = async (req, res) => {
    let update_tel = 0
 
    if (req.userInfo.role !== "host") {
-      return res.status(401).send({ error: "You doesn't have access to do that" });
+      return res.status(401).send({success:false,message: "You doesn't have access to do that" });
    }  
 
    await userModel.findOneAndUpdate({ _id: obj_id }, { $set: { 
@@ -36,11 +36,11 @@ const editAdmin = async (req, res) => {
 
    console.log(update_email_password)
       if (!update_email_password)
-         return res.json({message: "update email or password fail"});
+         return res.json({success:false,message: "update email or password fail"});
       if (!update_tel)
-         return res.json({message: "update telephone fail"});
+         return res.json({success:false,message: "update telephone fail"});
 
-      return res.json({message: "update success"});
+      return res.json({success:true,message: "update success"});
 };
 
 

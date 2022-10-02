@@ -7,7 +7,7 @@ const schoolEdit = (req, res) => {
       bgColor
    } = req.body);
 
-   if (req.userInfo.role !== "admin" || req.userInfo.role !== "host") {
+   if (req.userInfo.role !== "admin" && req.userInfo.role !== "host") {
       return res.status(401).send({ error: "You doesn't have access to do that" });
    }  
    
