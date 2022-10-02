@@ -8,7 +8,8 @@ const getNotapproveSchool = (req, res) => {
       tmp = new RegExp("^" + req.query.query );
    const query = {
       schoolID: {$regex: tmp ,$options:'i'},
-      status: "not_approve"
+      status: "not_approve",
+      paymentStatus:"success"
    }
    const page = req.query.page || 1;
    const limit = 3;

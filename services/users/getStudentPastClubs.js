@@ -1,4 +1,5 @@
 const StudentModel = require("../../models/student");
+const clubModel = require("../../models/club");
 const mongoose = require("mongoose");
 
 const getStudentPastClubs = async (req, res) => {
@@ -9,7 +10,7 @@ const getStudentPastClubs = async (req, res) => {
     let pastclubs = [];
     for (let i = 0; i < clubsID.length; i++) {
         if(clubsID[i].status != "Studying")
-            pastclubs.push(clubsID[i]);
+            pastclubs.push(await clubModel.findById(clubsID[i].clubID));
     }
     res.json({ clubs: pastclubs });
 };

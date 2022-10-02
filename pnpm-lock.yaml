@@ -21,6 +21,7 @@ specifiers:
   passport: ^0.6.0
   passport-jwt: ^4.0.0
   path: ^0.12.7
+  stripe: 10.12.0-beta.1
   validator: ^13.7.0
 
 dependencies:
@@ -43,6 +44,7 @@ dependencies:
   passport: 0.6.0
   passport-jwt: 4.0.0
   path: 0.12.7
+  stripe: 10.12.0-beta.1
   validator: 13.7.0
 
 devDependencies:
@@ -1444,6 +1446,14 @@ packages:
     engines: {node: '>=0.10.0'}
     dependencies:
       is-utf8: 0.2.1
+    dev: false
+
+  /stripe/10.12.0-beta.1:
+    resolution: {integrity: sha512-5zf4kpiY7BmYvn6023qW+1TsHi5K+pVN8Ceh/QXrT+Tu+kUGOd8758b/6e9AURCR8GP2MFbPQyHyVZ7+uZOQ4A==}
+    engines: {node: ^8.1 || >=10.*}
+    dependencies:
+      '@types/node': 18.7.13
+      qs: 6.10.3
     dev: false
 
   /supports-color/5.5.0:

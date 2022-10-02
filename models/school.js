@@ -36,15 +36,24 @@ const schoolSchema = new Schema({
    },
    requests: [mongoose.ObjectId],
    clubs: [mongoose.ObjectId],
-   schedule: [{
-      schoolYear: Number,
-      registerDate: Date,
-      endOfRegisterDate: Date,
-      endOfSchoolYear: Date,
-   }],
+   schedule: [
+      {
+         schoolYear: Number,
+         registerDate: Date,
+         endOfRegisterDate: Date,
+         endOfSchoolYear: Date,
+      },
+   ],
+   nowSchoolYear: {
+      type: Number,
+      default: 0,
+   },
    urlLogo: String,
    bgColor: String,
    adminID: [mongoose.ObjectId],
+   paymentIntentId: {
+      type: String,
+   },
 });
 
 schoolSchema.plugin(mongoosePaginate);

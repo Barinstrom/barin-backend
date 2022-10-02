@@ -2,6 +2,7 @@ const teacherModel = require("../../models/teacher");
 const clubModel = require("../../models/club");
 const mongoose = require("mongoose");
 
+// เรา paginate เอง
 const getTeacherOwnClubs = async (req, res) => {
    const queryclubs = await teacherModel.findOne({
       userID: new mongoose.mongo.ObjectId(req.userInfo._id),

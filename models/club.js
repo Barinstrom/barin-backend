@@ -6,7 +6,6 @@ const ClubSchema = new Schema({
    clubName: {
       type: String,
       required: true,
-      unique: true,
    },
    groupID: {
       type: String,
@@ -26,6 +25,10 @@ const ClubSchema = new Schema({
    limit: {
       type: Number,
       required: true,
+   },
+   isFull: {
+      type: Boolean,
+      default: false
    },
    schoolYear: {
       type: Number,

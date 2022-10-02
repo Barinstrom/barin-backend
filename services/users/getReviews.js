@@ -2,13 +2,14 @@ const clubModel = require("../../models/club");
 const reviewModel = require("../../models/review");
 
 const getReviews = async (req, res) => {
-    //หา groupID ของ club
-    const clubID = req.query.clubID;
-    const club = await clubModel.findById(clubID);
-    const groupID = club.groupID;
+    //หา club ที่จะดูรีวิว
+    const tmpClub = await clubModel.findById(req.query.clubID);
+    const club = await clubModel.findOne({ groupID: tmpClub.groupID, schoolYear: req.query.schoolYear });
+    if (!club)
+        return res.status(400).send({ error: "This club doesn't exist" });
 
     //query สำหรับ paginate
-    const query = { groupID: groupID };
+    const query = { groupID: tmpClub.groupID, schoolYear: req.query.schoolYear };
     const page = req.query.page || 1;
     const limit = 3;
 

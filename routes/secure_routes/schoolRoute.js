@@ -3,11 +3,11 @@ const router = express.Router();
 
 const verifyRole = require("../../middleware/verifyRole");
 
-const queryUser = require("../../services/users/queryUser");
-const querySchool = require("../../services/users/querySchool");
 const queryData = require("../../services/users/queryData");
 const addClub = require("../../services/users/addClub");
+const addClubs = require("../../services/users/addClubs");
 const registerClub = require("../../services/users/registerClub");
+const dropClub = require('../../services/users/dropClub');
 const addReview = require("../../services/users/addReview");
 const updateReview = require("../../services/users/updateReview");
 const getReview = require("../../services/users/getReviews");
@@ -16,8 +16,13 @@ const getTeacherOwnClubs = require("../../services/users/getTeacherOwnClubs");
 const getStudentPastClubs = require("../../services/users/getStudentPastClubs");
 const editSchool = require("../../services/users/system_admin/schoolEdit");
 const editAdmin = require("../../services/users/system_admin/adminEdit");
-
+const getSchoolStudent = require('../../services/users/getSchoolStudent');
+const getSchoolTeacher = require('../../services/users/getSchoolTeacher');
+const getClubStudent = require('../../services/users/getClubStudent');
+const getClubTeachers = require('../../services/users/getClubTeachers');
 const getSchoolClubs = require("../../services/users/getSchoolclubs");
+const getSchoolClubsName = require("../../services/users/getSchoolClubsName");
+
 const addTeacher = require("../../services/users/addTeacher");
 const addTeachers = require("../../services/users/addTeachers");
 const addStudent = require("../../services/users/addStudent");
@@ -28,37 +33,53 @@ const updateClub = require("../../services/users/updateClub");
 const deleteClubs = require("../../services/users/deleteClubs");
 const setSchedule = require("../../services/users/setSchedule");
 
+
 router.get(
    "/data",
    verifyRole("host", "admin", "teacher", "student"),
    queryData
 );
 router.post("/add-club", verifyRole("host", "admin"), addClub);
+router.post("/add-clubs", verifyRole("host", "admin"), addClubs);
 router.post("/add-student", verifyRole("host", "admin"), addStudent);
 router.post("/add-students", verifyRole("host", "admin"), addStudents);
 router.post("/add-teacher", verifyRole("host", "admin"), addTeacher);
 router.post("/add-teachers", verifyRole("host", "admin"), addTeachers);
-router.post(
-   "/add-review",
-   verifyRole("host", "admin", "teacher", "student"),
-   addReview
-);
+router.post("/add-review", verifyRole("student"), addReview);
 router.post("/register-club", verifyRole("student"), registerClub);
-router.patch(
-   "/update-review",
-   verifyRole("host", "admin", "teacher", "student"),
-   updateReview
-);
-router.get(
-   "/get-review",
-   verifyRole("host", "admin", "teacher", "student"),
-   getReview
-);
+router.post("/drop-club", verifyRole("student"), dropClub);
+router.patch("/update-review", verifyRole("student"), updateReview); //not use
+router.get("/get-review", verifyRole("host", "admin", "teacher", "student"), getReview);
 router.get(
    "/clubs",
    verifyRole("host", "admin", "teacher", "student"),
    getSchoolClubs
 );
+router.get(
+   "/clubs-name",
+   verifyRole("host", "admin", "teacher", "student"),
+   getSchoolClubsName
+);
+router.get(
+   "/students",
+   verifyRole("host", "admin", "teacher", "student"),
+   getSchoolStudent
+);
+router.get(
+    "/teachers",
+    verifyRole("host", "admin", "teacher", "student"),
+    getSchoolTeacher
+ );
+ router.get(
+   "/club/students",
+   verifyRole("host", "admin", "teacher","student"),
+   getClubStudent
+);
+router.get(
+   "/club/teachers",
+   verifyRole("host", "admin", "teacher","student"),
+   getClubTeachers
+)
 router.patch("/edit", verifyRole("host", "admin"), editSchool);
 router.patch("/edit_admin", verifyRole("host", "admin"), editAdmin);
 router.get("/student/ownclub", verifyRole("student"), getStudentOwnClubs);

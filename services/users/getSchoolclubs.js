@@ -1,12 +1,15 @@
 const clubModel = require("../../models/club");
+const SchoolModel = require("../../models/school");
 //const { PaginationParameters } = require('mongoose-paginate-v2');
 
-const getSchoolClubs = (req, res) => {
+const getSchoolClubs = async (req, res) => {
+   _school = await SchoolModel.findOne({schoolID: req.userInfo.schoolID}).exec();
    let tmp = "";
    if (req.query.query) tmp = new RegExp("^" + req.query.query);
    const query = {
       clubName: { $regex: tmp, $options: "i" },
       schoolID: req.userInfo.schoolID,
+      schoolYear: _school.nowSchoolYear,
    };
    const page = req.query.page || 1;
    const limit = 3;

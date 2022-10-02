@@ -6,11 +6,10 @@ const getStudentOwnClubs = async (req, res) => {
    const student = await StudentModel.findOne({
       userID: new mongoose.mongo.ObjectId(req.userInfo._id),
    });
-   console.log(student.clubs);
    let clubsID = student.clubs;
    let clubs = [];
    for (let i = 0; i < clubsID.length; i++) {
-      clubs.push(await clubModel.findById(clubsID[i]));
+      clubs.push(await clubModel.findById(clubsID[i].clubID));
    }
    res.json({ clubs: clubs });
 };
