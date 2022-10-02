@@ -15,6 +15,11 @@ const addClubs = async (req, res) => {
         if (!teacher)
             return res.status(400).send({ error: "This teacher doesn't exist." });
 
+        //เช็คว่าเป็น teacher ของโรงเรียนนี้หรือไม่
+        const _user = await userModel.findOne({ _id: teacher.userID });
+        if (_user.schoolID != req.userInfo.schoolID)
+            return res.status(400).send({ error: "This teacher isn't at your school." });  
+
         //เตรียม payloadClub
         const payloadClub = club;
         payloadClub["schoolID"] = req.userInfo.schoolID;
