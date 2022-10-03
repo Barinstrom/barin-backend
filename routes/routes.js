@@ -5,12 +5,12 @@ const login = require("../services/users/unauth/login");
 const forgotpassword = require("../services/users/unauth/forgotpassword");
 const updatepassword = require("../services/users/unauth/updatepassword");
 const verifyUser = require("../middleware/verifyUser");
-const getAllSchoolID = require('../services/users/unauth/getAllSchoolID');
+const getAllSchoolID = require("../services/users/unauth/getAllSchoolID");
 require("dotenv").config();
 
 router.get("/", (req, res) => {
    res.send(
-      "Hello BARIN API you can see docs on https://barin-api-doc.vercel.app/ "
+      "Hello BARIN API you can see docs on https://barin-api-doc.tawanchai.com/"
    );
 });
 router.get("/getAllSchoolID", getAllSchoolID);
