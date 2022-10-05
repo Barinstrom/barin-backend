@@ -36,10 +36,12 @@ const ClubSchema = new Schema({
    },
    schedule: [String],
    //reviews: [mongoose.ObjectId],
-   picture: {
-      pictureID: Number,
-      urlPicture: String,
-   },
+   
+   // picture: {
+   //    pictureID: Number,
+   //    urlPicture: String,
+   // },
+   urlPicture: String,
 });
 
 ClubSchema.plugin(mongoosePaginate);

@@ -1,5 +1,7 @@
 const clubModel = require("../../models/club");
 const teacherModel = require("../../models/teacher");
+const userModel = require("../../models/user");
+const { cloudinary } = require("../../utils/cloudinary");
 
 const addClubs = async (req, res) => {
     const clubs = req.body;
@@ -25,6 +27,14 @@ const addClubs = async (req, res) => {
         payloadClub["schoolID"] = req.userInfo.schoolID;
         delete payloadClub["firstname"];
         delete payloadClub["lastname"];
+        if (req.body.urlPicture) {
+            const uploadPic = await cloudinary.uploader.upload(req.body.urlPicture, {
+               upload_preset: "urlPicture",
+               public_id: req.userInfo.email,
+            });
+            const urlPicture = uploadPic.secure_url;
+            payloadClub["urlPicture"] = urlPicture;  
+         }
 
         //add new club
         const newClub = await clubModel.create(payloadClub);
