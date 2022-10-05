@@ -33,7 +33,6 @@ const updateClub = require("../../services/users/updateClub");
 const deleteClubs = require("../../services/users/deleteClubs");
 const setSchedule = require("../../services/users/setSchedule");
 
-
 router.get(
    "/data",
    verifyRole("host", "admin", "teacher", "student"),
@@ -83,9 +82,9 @@ router.get(
    "/club/teachers",
    verifyRole("host", "admin", "teacher", "student"),
    getClubTeachers
-)
-router.patch("/edit_school", verifyRole("host","admin"), editSchool);
-router.patch("/edit_admin_data", verifyRole("host", "admin"), editAdmin);
+);
+router.patch("/edit-school", verifyRole("host", "admin"), editSchool);
+router.patch("/edit-admin-data", verifyRole("host", "admin"), editAdmin);
 router.get("/student/ownclub", verifyRole("student"), getStudentOwnClubs);
 router.get("/teacher/ownclubs", verifyRole("teacher"), getTeacherOwnClubs);
 router.get("/student/pastclubs", verifyRole("student"), getStudentPastClubs);
