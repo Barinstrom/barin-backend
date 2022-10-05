@@ -79,6 +79,9 @@ const getClubStudent = async (req, res) => {
     }
     let finalDocs = [];
     for(let i=limit*(page-1);i<limit*(page-1)+limit;i++){
+        if(i>count-1){
+            continue;
+        }
         finalDocs.push(docs[i].student);
     }
     res.send({docs: finalDocs,totalDocs,limit,totalPages,page,pagingCounter,hasPrevPage,hasNextPage,prevPage,nextPage});
