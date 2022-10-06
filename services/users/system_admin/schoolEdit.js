@@ -14,7 +14,8 @@ const schoolEdit = async (req, res) => {
          schoolID: req.body.schoolID
    });
 
-   if (schoolName) {
+   if ( schoolName && ( ((req.userInfo.role == "admin") && school.status == "approve") 
+        || (req.userInfo.role == "host") ) ) {
       school.schoolName = schoolName;
    }
 
@@ -52,7 +53,8 @@ const schoolEdit = async (req, res) => {
       }
    }
 
-   if (urlLogo) {
+   if ( urlLogo && ( ((req.userInfo.role == "admin") && school.status == "approve") 
+   || (req.userInfo.role == "host") ) ) {
       try {
          const uploadLogo = await cloudinary.uploader.upload(urlLogo, {
             upload_preset: "urlLogo",
