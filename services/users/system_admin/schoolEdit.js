@@ -19,18 +19,21 @@ const schoolEdit = async (req, res) => {
    }
 
    if (paymentStatus && req.userInfo.role == "host") {
-      if (paymentStatus in ["success", "pending"]) {
+      const paymentStatusArray = ["success", "pending"];
+      if (paymentStatusArray.includes(paymentStatus)) {
          school.paymentStatus = paymentStatus;
       }
       school.paymentDate = new Date();
    }
 
    if (status && req.userInfo.role == "host") {
-      if (paymentStatus in ["approve", "pending", "not_approve"]) {
+      const statusArray = ["approve", "pending", "not_approve"];
+      if (statusArray.includes(status)) {
          school.status = status;
       }
    }
-
+   console.log(status)
+   console.log(school.status)
    if (urlCertificateDocument && req.userInfo.role == "host") {
       try {
          const uploadDoc = await cloudinary.uploader.upload(
