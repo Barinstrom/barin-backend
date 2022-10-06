@@ -32,8 +32,7 @@ const schoolEdit = async (req, res) => {
          school.status = status;
       }
    }
-   console.log(status)
-   console.log(school.status)
+
    if (urlCertificateDocument && req.userInfo.role == "host") {
       try {
          const uploadDoc = await cloudinary.uploader.upload(

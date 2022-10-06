@@ -6,7 +6,6 @@ const { sender } = require("../../../utils/mail");
 const editAdmin = async (req, res) => {
    const values = ({ email, tel } = req.body);
 
-   console.log(req.userInfo.schoolID);
    if (req.userInfo.role == "host" && values.email) {
       userModel
          .findOneAndUpdate(
