@@ -33,7 +33,6 @@ const updateClub = require("../../services/users/updateClub");
 const deleteClubs = require("../../services/users/deleteClubs");
 const setSchedule = require("../../services/users/setSchedule");
 
-
 router.get(
    "/data",
    verifyRole("host", "admin", "teacher", "student"),

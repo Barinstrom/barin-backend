@@ -17,6 +17,7 @@ const register = async (req, res) => {
       schoolName,
       role,
       certificate_doc,
+      tel,
    } = req.body;
 
    if (password != confirmPassword)
@@ -28,28 +29,27 @@ const register = async (req, res) => {
    if (!validator.isEmail(email))
       return res.status(400).send("Email format is not correct.");
 
-   const hashPassword = bcrypt.hashSync(password, 10);
-   const uploadedRes = await cloudinary.uploader.upload(certificate_doc, {
-      upload_preset: "certificate_doc",
-      public_id: email,
-   });
-   const logoDefault = "https://files.tawanchai.com/pic/promma.png";
-   const uploadLogo = await cloudinary.uploader.upload(logoDefault, {
-      upload_preset: "urlLogo",
-      public_id: email,
-   });
-
-   const url_doc = uploadedRes.secure_url;
-   const urlLogo = uploadLogo.secure_url;
-
-   const token = jwt.sign({ email: email }, process.env.SECRET, {
-      expiresIn: "7d",
-   });
    const school = await SchoolModel.findOne({ schoolID }).exec();
    const schoolByName = await SchoolModel.findOne({ schoolName }).exec();
    const checkuser = await UserModel.findOne({ email }).exec();
-   //console.log(school,schoolByName)
    if (!school && !schoolByName && !checkuser) {
+      const hashPassword = bcrypt.hashSync(password, 10);
+      const uploadedRes = await cloudinary.uploader.upload(certificate_doc, {
+         upload_preset: "certificate_doc",
+         public_id: schoolID,
+      });
+      const logoDefault = "https://files.tawanchai.com/pic/spt.png";
+      const uploadLogo = await cloudinary.uploader.upload(logoDefault, {
+         upload_preset: "urlLogo",
+         public_id: schoolID,
+      });
+
+      const url_doc = uploadedRes.secure_url;
+      const urlLogo = uploadLogo.secure_url;
+
+      const token = jwt.sign({ email: email }, process.env.SECRET, {
+         expiresIn: "7d",
+      });
       const schoolData = {
          schoolID,
          schoolName,
@@ -74,7 +74,7 @@ const register = async (req, res) => {
 
       const user = new UserModel(data);
       const _user = await user.save();
-      await AdminModel.create({ userID: _user._id });
+      await AdminModel.create({ userID: _user._id, tel: tel });
       sender(data.email, data.email, data.confirmationCode);
       return res.json({ success: true, data: _user });
    } else if (school) {
