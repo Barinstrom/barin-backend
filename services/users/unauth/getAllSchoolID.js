@@ -5,7 +5,7 @@ const getAllSchoolID = async (req, res) => {
    try {
       const allSchoolID = await schoolModel
          .find()
-         .select({ _id: 0, schoolID: 1, urlLogo: 1 });
+         .select({ _id: 0, schoolID: 1, urlLogo: 1, schoolName: 1});
       res.send(allSchoolID);
    } catch (err) {
       res.status(400).send({
