@@ -6,7 +6,7 @@ const schoolEdit = async (req, res) => {
    
    
    const school = await SchoolModel.findOne({
-         schoolID: req.userInfo.schoolID
+         schoolID: req.body.schoolID
    });
 
    if (schoolName ) {
