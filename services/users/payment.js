@@ -1,7 +1,6 @@
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const SchoolModel = require("../../models/school");
 const payment = async (req, res) => {
-   console.log("schoolname", req.userInfo.schoolID);
    const school = await SchoolModel.findOne({
       schoolID: req.userInfo.schoolID,
    }).exec();

@@ -1,49 +1,62 @@
 const userModel = require("../../../models/user");
 const adminModel = require("../../../models/admin");
-const bcrypt = require("bcryptjs");
-const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
+const { sender } = require("../../../utils/mail");
 
 const editAdmin = async (req, res) => {
-   const values = ({ _id, email, password, tel } = req.body);
-   const hashPassword = bcrypt.hashSync(values.password, 10);
-   const obj_id = new mongoose.mongo.ObjectId(values._id);
-   let update_email_password = 0
-   let update_tel = 0
+   const values = ({ email, tel } = req.body);
 
-   if (req.userInfo.role !== "host") {
-      return res.status(401).send({success:false,message: "You doesn't have access to do that" });
-   }  
-
-   await userModel.findOneAndUpdate({ _id: obj_id }, { $set: { 
-      email: values.email,
-      password: hashPassword} })
-      .then(() => {
-         update_email_password = 1
-      })
-      .catch((err) => {
-         console.log("test")
-         update_email_password = 0
+   console.log(req.userInfo.schoolID);
+   if (req.userInfo.role == "host" && values.email) {
+      userModel
+         .findOneAndUpdate(
+            { schoolID: req.userInfo.schoolID },
+            {
+               $set: {
+                  email: values.email,
+               },
+            }
+         )
+         .then(() => {
+            const token = jwt.sign({ email: email }, process.env.SECRET, {
+               expiresIn: "7d",
+            });
+            sender(values.email, values.email, token);
+         })
+         .catch((err) => {
+            console.log(err);
+            return res.json({
+               success: false,
+               message: "update email or password fail",
+            });
+         });
+   } else if (values.email) {
+      return res.json({
+         success: false,
+         message: "You can't change your email",
       });
-    
-   await adminModel.findOneAndUpdate({ userID: obj_id }, { $set: { 
-      tel: values.tel} })
-      .then((result) => {
-         update_tel = 1
-      })
+   }
+
+   const user = await userModel
+      .findOne({ schoolID: req.userInfo.schoolID })
+      .exec();
+
+   adminModel
+      .findOneAndUpdate(
+         { userID: user._id },
+         {
+            $set: {
+               tel: values.tel,
+            },
+         }
+      )
+      .then((result) => {})
       .catch((err) => {
-         update_tel = 0
+         return res.json({ success: false, message: "update telephone fail" });
       });
 
-   console.log(update_email_password)
-      if (!update_email_password)
-         return res.json({success:false,message: "update email or password fail"});
-      if (!update_tel)
-         return res.json({success:false,message: "update telephone fail"});
-
-      return res.json({success:true,message: "update success"});
+   return res.json({ success: true, message: "update success" });
 };
-
-
 
 module.exports = editAdmin;
 
