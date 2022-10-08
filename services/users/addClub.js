@@ -38,7 +38,7 @@ const addClub = async (req, res) => {
    if (req.body.urlPicture) {
       const uploadPic = await cloudinary.uploader.upload(req.body.urlPicture, {
          upload_preset: "urlPicture",
-         public_id: req.body.clubName,
+         public_id: req.body.clubName + "_" + req.userInfo.schoolID,
       });
       const urlPicture = uploadPic.secure_url;
       payloadClub["urlPicture"] = urlPicture;

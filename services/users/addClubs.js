@@ -42,7 +42,7 @@ const addClubs = async (req, res) => {
             req.body.urlPicture,
             {
                upload_preset: "urlPicture",
-               public_id: req.body.clubName,
+               public_id: req.body.clubName + "_" + req.userInfo.schoolID,
             }
          );
          const urlPicture = uploadPic.secure_url;
