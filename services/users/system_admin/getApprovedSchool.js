@@ -2,15 +2,14 @@ const schoolModel = require("../../../models/school");
 //const { PaginationParameters } = require('mongoose-paginate-v2');
 
 const getApprovedSchool = (req, res) => {
-
-   let tmp = ""
+   let tmp = "(?!^all$)(^.*$)";
    if (req.query.query)
-      tmp = new RegExp("^" + req.query.query );
+      tmp = new RegExp("(?!^all$)" + "(^" + req.query.query + "$)");
    const query = {
-      schoolID: {$regex: tmp ,$options:'i'},
+      schoolID: { $regex: tmp, $options: "i" },
       status: "approve",
-      paymentStatus:"success"
-   }
+      paymentStatus: "success",
+   };
    const page = req.query.page || 1;
    const limit = 3;
 
@@ -21,7 +20,7 @@ const getApprovedSchool = (req, res) => {
          res.send(result);
       })
       .catch((err) => {
-         res.json({success:false,message: "update email or password fail"});
+         res.json({ success: false, message: "update email or password fail" });
          res.status(400).send("paginate error");
       });
 };
