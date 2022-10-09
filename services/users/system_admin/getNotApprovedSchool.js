@@ -2,15 +2,14 @@ const schoolModel = require("../../../models/school");
 //const { PaginationParameters } = require('mongoose-paginate-v2');
 
 const getNotapproveSchool = (req, res) => {
-   
-   let tmp = ""
+   let tmp = "(?!^all$)(^.*$)";
    if (req.query.query)
-      tmp = new RegExp("^" + req.query.query );
+      tmp = new RegExp("(?!^all$)" + "(^" + req.query.query + "$)");
    const query = {
-      schoolID: {$regex: tmp ,$options:'i'},
+      schoolID: { $regex: tmp, $options: "i" },
       status: "not_approve",
-      paymentStatus:"success"
-   }
+      paymentStatus: "success",
+   };
    const page = req.query.page || 1;
    const limit = 3;
 
