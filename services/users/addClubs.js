@@ -37,6 +37,8 @@ const addClubs = async (req, res) => {
       payloadClub["schoolID"] = req.userInfo.schoolID;
       delete payloadClub["firstname"];
       delete payloadClub["lastname"];
+      payloadClub["schedule"] = ["13:00-13:50"]
+      payloadClub["urlPicture"] = "https://files.tawanchai.com/pic/rordor.png"
       if (req.body.urlPicture) {
          const uploadPic = await cloudinary.uploader.upload(
             req.body.urlPicture,
@@ -48,6 +50,8 @@ const addClubs = async (req, res) => {
          const urlPicture = uploadPic.secure_url;
          payloadClub["urlPicture"] = urlPicture;
       }
+      
+
 
       //add new club
       const newClub = await clubModel.create(payloadClub);
