@@ -93,7 +93,7 @@ const registerClub = async (req, res) => {
     }
     const new_study_history = [new_club_study_data,...study_history];
     _student.clubs = new_study_history;
-    console.log(_student.clubs,new_study_history,new_club_study_data);
+    console.log('asdfgh',_student.clubs,new_study_history,new_club_study_data);
     await _student.save();
 
     if(count+1>=_club.limit){

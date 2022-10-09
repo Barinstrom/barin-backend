@@ -9,7 +9,7 @@ const getReviews = async (req, res) => {
         return res.status(400).send({ error: "This club doesn't exist." });
 
     //query สำหรับ paginate
-    const query = { groupID: tmpClub.groupID, schoolYear: req.query.schoolYear };
+    const query = { groupID: tmpClub.groupID, schoolYear: req.query.schoolYear, studentID:{$ne: new mongoose.mongo.ObjectId(req.userInfo._id)}};
     const page = req.query.page || 1;
     const limit = 3;
 

@@ -18,6 +18,19 @@ const ReviewSchema = new Schema({
    schoolYear: {
       type: Number,
       required: true,
+   },
+   lastUpdateDate: {
+      type: Date,
+      required: true
+   },
+   edited: {
+      type: Boolean,
+      default: false
+   },
+   satisfiedLevel:{
+      type: String,
+      enum: ["พอใจ", "ไม่พอใจ"],
+      required: true
    }
 });
 
