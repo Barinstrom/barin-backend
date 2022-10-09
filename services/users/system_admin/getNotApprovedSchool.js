@@ -12,10 +12,11 @@ const getNotapproveSchool = (req, res) => {
    };
    const page = req.query.page || 1;
    const limit = 3;
+   const sort = "field -paymentDate";
 
    //{ color: "blue", published: true }, { page: 1, limit: 10, projection: { color: 1 } }
    schoolModel
-      .paginate(query, { page, limit })
+      .paginate(query, { page, limit, sort })
       .then((result) => {
          res.send(result);
       })
