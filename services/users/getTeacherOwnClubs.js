@@ -8,15 +8,16 @@ const getTeacherOwnClubs = async (req, res) => {
    const queryclubs = await teacherModel.findOne({
       userID: new mongoose.mongo.ObjectId(req.userInfo._id),
    });
-   console.log(queryclubs.clubs);
+   //console.log(queryclubs.clubs);
    let clubsID = queryclubs.clubs;
    let clubs = [];
    for (let i = 0; i < clubsID.length; i++) {
-      const doc = await clubModel.findById(clubsID[i].clubID).lean();
-      const teachers = await getTeachers(clubsID[i].clubID,req);
+      const doc = await clubModel.findById(clubsID[i]).lean();
+      //console.log(clubsID[i].clubID,doc)
+      const teachers = await getTeachers(clubsID[i],req);
       clubs.push({...doc,teachers});
    }
-   res.json({ clubs: clubs });
+   res.json(clubs);
 };
 
 module.exports = getTeacherOwnClubs;
