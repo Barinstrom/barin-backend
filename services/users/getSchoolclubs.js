@@ -17,7 +17,7 @@ const getSchoolClubs = async (req, res) => {
    const limit = 3;
 
    //{ color: "blue", published: true }, { page: 1, limit: 10, projection: { color: 1 } }
-   const _clubs = await clubModel.paginate(query, { page, limit });
+   let _clubs = await clubModel.paginate(query, { page, limit });
    let result = [];
    //console.log(_clubs);
    for(const club of _clubs.docs){
@@ -27,8 +27,9 @@ const getSchoolClubs = async (req, res) => {
       const tmp = {...club._doc,teachers};
       result.push(tmp);
    }
+   _clubs.docs = result;
 
-   res.send(result);
+   res.send(_clubs);
 };
 
 module.exports = getSchoolClubs;
