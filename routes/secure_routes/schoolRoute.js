@@ -30,6 +30,7 @@ const addStudent = require("../../services/users/addStudent");
 const addStudents = require("../../services/users/addStudents");
 const updateStudent = require("../../services/users/updateStudent");
 const updateTeacher = require("../../services/users/updateTeacher");
+const updateStudyStatus = require("../../services/users/updateStudyStatus");
 const updateClub = require("../../services/users/updateClub");
 const deleteClubs = require("../../services/users/deleteClubs");
 const setSchedule = require("../../services/users/setSchedule");
@@ -107,6 +108,8 @@ router.patch(
    verifyRole("teacher", "host", "admin"),
    updateClub
 );
+router.patch("/update-study-status", verifyRole("host", "admin", "teacher"), updateStudyStatus);
+
 router.delete("/delete-clubs", verifyRole("host", "admin"), deleteClubs);
 router.patch("/set-schedule", verifyRole("host", "admin"), setSchedule);
 
