@@ -1,5 +1,7 @@
+const club = require("../../models/club");
 const clubModel = require("../../models/club");
 const SchoolModel = require("../../models/school");
+const getTeachers = require("../../utils/getClubTeacher");
 //const { PaginationParameters } = require('mongoose-paginate-v2');
 
 const getSchoolClubs = async (req, res) => {
@@ -15,14 +17,18 @@ const getSchoolClubs = async (req, res) => {
    const limit = 3;
 
    //{ color: "blue", published: true }, { page: 1, limit: 10, projection: { color: 1 } }
-   clubModel
-      .paginate(query, { page, limit })
-      .then((result) => {
-         res.send(result);
-      })
-      .catch((err) => {
-         res.status(400).send("paginate error");
-      });
+   const _clubs = await clubModel.paginate(query, { page, limit });
+   let result = [];
+   //console.log(_clubs);
+   for(const club of _clubs.docs){
+      console.log(club)
+      const teachers = await getTeachers(club._id,req);
+      console.log(teachers)
+      const tmp = {...club._doc,teachers};
+      result.push(tmp);
+   }
+
+   res.send(result);
 };
 
 module.exports = getSchoolClubs;

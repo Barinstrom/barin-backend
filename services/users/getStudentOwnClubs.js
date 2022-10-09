@@ -1,5 +1,6 @@
 const StudentModel = require("../../models/student");
 const clubModel = require("../../models/club");
+const getTeachers = require("../../utils/getClubTeacher");
 const mongoose = require("mongoose");
 
 const getStudentOwnClubs = async (req, res) => {
@@ -9,8 +10,11 @@ const getStudentOwnClubs = async (req, res) => {
    let clubsID = student.clubs;
    let clubs = [];
    for (let i = 0; i < clubsID.length; i++) {
-      if(clubsID[i].status == "Studying")
-         clubs.push(await clubModel.findById(clubsID[i].clubID));
+      if(clubsID[i].status == "Studying"){
+         const doc = await clubModel.findById(clubsID[i].clubID).lean();
+         const teachers = await getTeachers(clubsID[i].clubID,req);
+         clubs.push({...doc,teachers});
+      }
    }
    res.json({ clubs: clubs });
 };
