@@ -33,11 +33,17 @@ const updateTeacher = require("../../services/users/updateTeacher");
 const updateClub = require("../../services/users/updateClub");
 const deleteClubs = require("../../services/users/deleteClubs");
 const setSchedule = require("../../services/users/setSchedule");
+const getClubStudentName = require("../../services/users/getAllClubStudentName");
 
 router.get(
    "/data",
    verifyRole("host", "admin", "teacher", "student"),
    queryData
+);
+router.get(
+   "/club/students/name",
+   verifyRole("host", "admin", "teacher"),
+   getClubStudentName
 );
 router.post("/add-club", verifyRole("host", "admin"), addClub);
 router.post("/add-clubs", verifyRole("host", "admin"), addClubs);

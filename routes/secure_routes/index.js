@@ -16,7 +16,7 @@ const verifyRole = require("../../middleware/verifyRole");
 const editSchool = require("../../services/users/system_admin/schoolEdit");
 router.use(verifyToken);
 //const profile = require("./users/profile");
-router.patch("/edit_school", verifyRole("host","admin"), editSchool);
+router.patch("/update-school", verifyRole("host","admin"), editSchool);
 router.delete("/:schoolID/delete-all", verifyRole("host"), deleteAll);
 router.get("/schools/approved", verifyRole("host"), getApprovedSchool);
 router.get("/schools/pending", verifyRole("host"), getPendingSchool);
