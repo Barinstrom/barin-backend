@@ -19,8 +19,15 @@ const addReview = async (req, res) => {
    if(!isPass)
       return res.status(400).send({ error: "This student hasn't passed this club." });
 
+   //เช็คว่าเคยรีวิวคลับนี้ยัง
+   const checkReview = await reviewModel.findOne({studentID: student.userID, schoolYear: club.schoolYear});
+   if(checkReview)
+      return res.status(400).send({ error: "You have already reviewed this club." });
+
    // add new review in reviews
-   const payloadReview = { textReview: req.body.textReview, groupID: club.groupID, schoolYear: club.schoolYear, studentID: student.userID};
+   let now = new Date().getTime();
+   const payloadReview = { textReview: req.body.textReview, groupID: club.groupID, schoolYear: club.schoolYear, 
+                           studentID: student.userID, lastUpdateDate: now, satisfiedLevel: req.body.satisfiedLevel};
    const review = new reviewModel(payloadReview);
    await review.save()
       .then(() => {

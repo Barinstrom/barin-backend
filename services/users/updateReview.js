@@ -8,7 +8,8 @@ const updateReview = async (req, res) => {
       return res.status(400).send("Invalid reviewID")
    }
    // update review
-   await reviewModel.findByIdAndUpdate(reviewID , { $set: { textReview : req.body.textReview } })
+   await reviewModel.findByIdAndUpdate(reviewID , { $set: { textReview : req.body.textReview , satisfiedLevel: req.body.satisfiedLevel,
+                                                   updateReview: true, edited: true, lastUpdateDate: new Date().getTime()} })
       .then(() => {
          res.send({ success: true });
       })
