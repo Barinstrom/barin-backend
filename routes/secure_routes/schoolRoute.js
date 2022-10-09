@@ -11,6 +11,7 @@ const dropClub = require("../../services/users/dropClub");
 const addReview = require("../../services/users/addReview");
 const updateReview = require("../../services/users/updateReview");
 const getReview = require("../../services/users/getReviews");
+const getOwnReview = require("../../services/users/getOwnReview");
 const getStudentOwnClubs = require("../../services/users/getStudentOwnClubs");
 const getTeacherOwnClubs = require("../../services/users/getTeacherOwnClubs");
 const getStudentPastClubs = require("../../services/users/getStudentPastClubs");
@@ -52,6 +53,11 @@ router.get(
    "/get-review",
    verifyRole("host", "admin", "teacher", "student"),
    getReview
+);
+router.get(
+   "/get-own-review",
+   verifyRole("student"),
+   getOwnReview
 );
 router.get(
    "/clubs",

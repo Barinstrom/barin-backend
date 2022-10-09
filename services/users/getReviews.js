@@ -6,7 +6,7 @@ const getReviews = async (req, res) => {
     const tmpClub = await clubModel.findById(req.query.clubID);
     const club = await clubModel.findOne({ groupID: tmpClub.groupID, schoolYear: req.query.schoolYear });
     if (!club)
-        return res.status(400).send({ error: "This club doesn't exist" });
+        return res.status(400).send({ error: "This club doesn't exist." });
 
     //query สำหรับ paginate
     const query = { groupID: tmpClub.groupID, schoolYear: req.query.schoolYear };
