@@ -12,9 +12,9 @@ const activate_admin = async (req, res, next) => {
          }
       );
       if (user) {
-         return res.status(200).send({ status: "true" });
+         return res.status(200).send({ status: true });
       } else {
-         return res.status(404).send({ status: "false" });
+         return res.status(404).send({ status: false });
       }
    });
 };
