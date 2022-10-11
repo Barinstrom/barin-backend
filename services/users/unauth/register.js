@@ -75,7 +75,7 @@ const register = async (req, res) => {
       const user = new UserModel(data);
       const _user = await user.save();
       await AdminModel.create({ userID: _user._id, tel: tel });
-      sender(data.email, data.email, data.confirmationCode);
+      sender(data.email, schoolName, data.confirmationCode);
       return res.json({ success: true, data: _user });
    } else if (school) {
       return res.status(400).send("SchoolID is already exist.");

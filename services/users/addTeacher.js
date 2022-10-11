@@ -1,8 +1,8 @@
 const teacherModel = require("../../models/teacher");
 const userModel = require("../../models/user");
 const schoolModel = require("../../models/school");
-const { sender } = require("../../utils/mail");
-const mongoose = require("mongoose");
+// const { sender } = require("../../utils/mail");
+const { activate } = require("../../utils/activate");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const addTeacher = async (req, res) => {
@@ -39,7 +39,7 @@ const addTeacher = async (req, res) => {
       password += characters[Math.floor(Math.random() * characters.length)];
    }
    password = bcrypt.hashSync(password, 10);
-   const token = jwt.sign({ email: email }, process.env.SECRET, {
+   const token = jwt.sign({ email: email }, process.env.RESET_PASSWORD_KEY, {
       expiresIn: "7d",
    });
 
@@ -58,7 +58,14 @@ const addTeacher = async (req, res) => {
       tel,
       // clubs: clubsID,
    });
-   sender(new_user.email, new_user.email, new_user.confirmationCode);
+   // sender(new_user.email, new_user.email, new_user.confirmationCode);
+   activate(
+      new_user.email,
+      firstname,
+      _school.schoolName,
+      new_user.schoolID,
+      new_user.confirmationCode
+   );
    res.send({ success: true });
 };
 

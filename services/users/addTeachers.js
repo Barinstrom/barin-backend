@@ -1,9 +1,9 @@
 const teacherModel = require("../../models/teacher");
 const userModel = require("../../models/user");
-const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { sender } = require("../../utils/mail");
+const { activate } = require("../../utils/activate");
 
 const addTeachers = async (req, res) => {
    let mergingTeacher = req.body; // array of object
@@ -53,8 +53,7 @@ const addTeachers = async (req, res) => {
       for (let j = 0; j < doc.length; j++) {
          if (mergingTeacher[i].email == doc[j].email) {
             // old teacher => update
-            const { email, firstname, lastname, tel} =
-               mergingTeacher[i];
+            const { email, firstname, lastname, tel } = mergingTeacher[i];
             // const clubsID = clubs.map((el) => {
             //    return new mongoose.mongo.ObjectId(el);
             // });
@@ -74,7 +73,7 @@ const addTeachers = async (req, res) => {
       }
       //console.log('aaaa',isold);
       if (!isold) {
-         const { email, firstname, lastname, tel} = mergingTeacher[i];
+         const { email, firstname, lastname, tel } = mergingTeacher[i];
          // const clubsID = clubs.map((el) => {
          //    return new mongoose.mongo.ObjectId(el);
          // });
@@ -94,9 +93,13 @@ const addTeachers = async (req, res) => {
                characters[Math.floor(Math.random() * characters.length)];
          }
          password = bcrypt.hashSync(password, 10);
-         const token = jwt.sign({ email: email }, process.env.SECRET, {
-            expiresIn: "7d",
-         });
+         const token = jwt.sign(
+            { email: email },
+            process.env.RESET_PASSWORD_KEY,
+            {
+               expiresIn: "7d",
+            }
+         );
 
          const new_user = await userModel.create({
             email,
@@ -113,7 +116,14 @@ const addTeachers = async (req, res) => {
             tel,
             // clubs: clubsID,
          });
-         sender(new_user.email, new_user.email, new_user.confirmationCode);
+         // sender(new_user.email, new_user.email, new_user.confirmationCode);
+         activate(
+            new_user.email,
+            firstname,
+            _school.schoolName,
+            new_user.schoolID,
+            new_user.confirmationCode
+         );
          new_teacher.push(new_user);
          //res.send({ success: true });
       }

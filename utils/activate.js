@@ -21,17 +21,19 @@ const handlebarOptions = {
 
 transporter.use("compile", hbs(handlebarOptions));
 
-const sender = async (tomail, toname, confirmationCode) => {
+const activate = async (tomail, toname, schoolName, schoolID, resetCode) => {
    await transporter.sendMail(
       {
          from: "Barin Admin <barinschool@hotmail.com>",
          to: `${toname} <${tomail}>`,
          subject: "Activatate your account",
-         template: "activate_admin",
+         template: "activate_TS",
          context: {
             toname: toname,
-            WEB_URL: process.env.WEB_URL,
-            confirmationCode: confirmationCode,
+            schoolName: schoolName,
+            schoolID: schoolID,
+            WEB_URL_FRONT: process.env.WEB_URL_FRONT,
+            resetCode: resetCode,
          },
       },
       (err, info) => {
@@ -46,5 +48,5 @@ const sender = async (tomail, toname, confirmationCode) => {
 };
 
 module.exports = {
-   sender,
+   activate,
 };

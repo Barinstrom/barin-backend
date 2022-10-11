@@ -4,3 +4,4 @@ node_modules
 .env.me
 .env.vault
 package-lock.json
+.DS_Store

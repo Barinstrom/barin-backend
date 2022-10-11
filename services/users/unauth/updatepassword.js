@@ -25,6 +25,7 @@ const updatepassword = async (req, res) => {
                const hashPassword = bcrypt.hashSync(newPassword, 10);
 
                user.password = hashPassword;
+               user.status = "Active";
                user.save((err, result) => {
                   if (err) {
                      return res.status(400).send("Reset Password Error");

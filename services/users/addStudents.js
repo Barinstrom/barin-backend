@@ -2,7 +2,8 @@ const studentModel = require("../../models/student");
 const userModel = require("../../models/user");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { sender } = require("../../utils/mail");
+const { activate } = require("../../utils/activate");
+// const { sender } = require("../../utils/mail");
 
 const addStudents = async (req, res) => {
    let mergingStudent = req.body; // array of object
@@ -109,9 +110,13 @@ const addStudents = async (req, res) => {
                characters[Math.floor(Math.random() * characters.length)];
          }
          password = bcrypt.hashSync(password, 10);
-         const token = jwt.sign({ email: email }, process.env.SECRET, {
-            expiresIn: "7d",
-         });
+         const token = jwt.sign(
+            { email: email },
+            process.env.RESET_PASSWORD_KEY,
+            {
+               expiresIn: "7d",
+            }
+         );
 
          const new_user = await userModel.create({
             email,
@@ -132,7 +137,14 @@ const addStudents = async (req, res) => {
             tel,
             // clubs: clubsID,
          });
-         sender(new_user.email, new_user.email, new_user.confirmationCode);
+         activate(
+            new_user.email,
+            firstname,
+            _school.schoolName,
+            new_user.schoolID,
+            new_user.confirmationCode
+         );
+         // sender(new_user.email, new_user.email, new_user.confirmationCode);
          new_student.push(new_user);
          //res.send({ success: true });
       }

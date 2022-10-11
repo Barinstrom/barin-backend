@@ -1,7 +1,8 @@
 const userModel = require("../../models/user");
 const studentModel = require("../../models/student");
 const schoolModel = require("../../models/school");
-const { sender } = require("../../utils/mail");
+// const { sender } = require("../../utils/mail");
+const { activate } = require("../../utils/activate");
 const jwt = require("jsonwebtoken");
 const addStudent = async (req, res) => {
    const {
@@ -38,7 +39,7 @@ const addStudent = async (req, res) => {
    for (let i = 0; i < 25; i++) {
       password += characters[Math.floor(Math.random() * characters.length)];
    }
-   const token = jwt.sign({ email: email }, process.env.SECRET, {
+   const token = jwt.sign({ email: email }, process.env.RESET_PASSWORD_KEY, {
       expiresIn: "7d",
    });
 
@@ -61,7 +62,14 @@ const addStudent = async (req, res) => {
       clubs: [],
       tel,
    });
-   sender(new_user.email, new_user.email, new_user.confirmationCode);
+   // sender(new_user.email, new_user.email, new_user.confirmationCode);
+   activate(
+      new_user.email,
+      new_student.firstname,
+      _school.schoolName,
+      new_user.schoolID,
+      new_user.confirmationCode
+   );
    return res.json({ success: true, user: new_user, student: new_student });
 };
 

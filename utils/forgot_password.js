@@ -1,4 +1,6 @@
 const nodemailer = require("nodemailer");
+const hbs = require("nodemailer-express-handlebars");
+const path = require("path");
 require("dotenv").config();
 
 let transporter = nodemailer.createTransport({
@@ -9,18 +11,28 @@ let transporter = nodemailer.createTransport({
    },
 });
 
+const handlebarOptions = {
+   viewEngine: {
+      partialsDir: path.resolve("./utils/htmlTemplate/"),
+      defaultLayout: false,
+   },
+   viewPath: path.resolve("./utils/htmlTemplate/"),
+};
+
+transporter.use("compile", hbs(handlebarOptions));
+
 const forgot_pass = async (tomail, toname, resetCode) => {
    await transporter.sendMail(
       {
          from: "Barin Admin <barinschool@hotmail.com>",
          to: `${toname} <${tomail}>`,
          subject: "Reset Password",
-         html: `<h1>Email reset</h1>
-        <h2>Hello ${toname}</h2>
-        <p>Please enter the link to reset your password</p>
-        <p>Link will expired next 15 minutes.</p>
-        <a href=${process.env.WEB_URL_FRONT}/resetPass?token=${resetCode}> Click here</a>
-        </div>`,
+         template: "forgotpassword",
+         context: {
+            toname: toname,
+            WEB_URL_FRONT: process.env.WEB_URL_FRONT,
+            resetCode: resetCode,
+         },
       },
       (err, info) => {
          if (err) {
