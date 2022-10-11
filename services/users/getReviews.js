@@ -8,6 +8,8 @@ const getReviews = async (req, res) => {
     if (!tmpClub)
         return res.status(400).send({ error: "This club doesn't exist." });
     const club = await clubModel.findOne({ groupID: tmpClub.groupID, schoolYear: req.query.schoolYear });
+    if (!club)
+        return res.status(400).send({ error: "This club does not exist this school year." });
     
 
     //query สำหรับ paginate

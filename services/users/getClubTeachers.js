@@ -1,9 +1,19 @@
 const teacherModel = require("../../models/teacher");
+const clubModel = require("../../models/club");
 const userModel = require("../../models/user");
 
 
 const getClubTeachers = async (req, res) => {
-    const docs = await userModel
+
+   //หา club ที่จะดูรีวิว
+   const tmpClub = await clubModel.findById(req.query.clubID);
+   if (!tmpClub)
+      return res.status(400).send({ error: "This club doesn't exist." });
+   const club = await clubModel.findOne({ groupID: tmpClub.groupID, schoolYear: req.query.schoolYear });
+   if (!club)
+      return res.status(400).send({ error: "This club does not exist this school year." });
+
+   const docs = await userModel
       .aggregate([
          {
             $match:
@@ -34,14 +44,14 @@ const getClubTeachers = async (req, res) => {
       ])
       .exec();
 
-    const teachers = [];
-    for(let i=0;i<docs.length;i++){
-        for(const Club of docs[i].teacher.clubs){
-            if(Club.toString()==req.query.clubID){
-                teachers.push(docs[i].teacher)
+   const teachers = [];
+   for(let i=0;i<docs.length;i++){
+      for(const Club of docs[i].teacher.clubs){
+            if(Club.toString()==club._id){
+               teachers.push(docs[i].teacher)
             }
-        }
-    }
+      }
+   }
    res.send(teachers);
 };
 
