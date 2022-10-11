@@ -30,7 +30,7 @@ const sender = async (tomail, toname, confirmationCode) => {
          template: "activate_admin",
          context: {
             toname: toname,
-            WEB_URL: process.env.WEB_URL,
+            WEB_URL: process.env.WEB_URL_FRONT,
             confirmationCode: confirmationCode,
          },
       },
