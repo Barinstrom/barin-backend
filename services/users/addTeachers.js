@@ -107,7 +107,7 @@ const addTeachers = async (req, res) => {
             role: "teacher",
             password,
             status: "Pending",
-            confirmationCode: token,
+            resetToken: token,
          });
          await teacherModel.create({
             userID: new_user._id,
@@ -122,7 +122,7 @@ const addTeachers = async (req, res) => {
             firstname,
             _school.schoolName,
             new_user.schoolID,
-            new_user.confirmationCode
+            new_user.resetToken
          );
          new_teacher.push(new_user);
          //res.send({ success: true });

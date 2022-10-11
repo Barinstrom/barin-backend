@@ -124,7 +124,7 @@ const addStudents = async (req, res) => {
             role: "student",
             password,
             status: "Pending",
-            confirmationCode: token,
+            resetToken: token,
          });
          await studentModel.create({
             userID: new_user._id,
@@ -142,7 +142,7 @@ const addStudents = async (req, res) => {
             firstname,
             _school.schoolName,
             new_user.schoolID,
-            new_user.confirmationCode
+            new_user.resetToken
          );
          // sender(new_user.email, new_user.email, new_user.confirmationCode);
          new_student.push(new_user);
