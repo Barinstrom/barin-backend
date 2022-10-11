@@ -6,6 +6,7 @@ const forgotpassword = require("../services/users/unauth/forgotpassword");
 const updatepassword = require("../services/users/unauth/updatepassword");
 const verifyUser = require("../middleware/verifyUser");
 const getAllSchoolID = require("../services/users/unauth/getAllSchoolID");
+const activate_admin = require("../services/users/unauth/activate");
 require("dotenv").config();
 
 router.get("/", (req, res) => {
@@ -18,6 +19,7 @@ router.post("/register", register);
 router.post("/login", login);
 router.post("/forgotpassword", forgotpassword);
 router.post("/updatepassword", updatepassword);
+router.post("/activate", activate_admin);
 router.get("/confirm/:confirmationCode", verifyUser);
 
 module.exports = router;
