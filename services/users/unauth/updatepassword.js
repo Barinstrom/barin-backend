@@ -13,28 +13,28 @@ const updatepassword = async (req, res) => {
             if (error) {
                return res.status(400).send("Incorrect token or it is expired");
             }
-            UserModel.findOne({ resetToken: token }, (err, user) => {
-               if (err || !user) {
-                  return res
-                     .status(400)
-                     .send("User with this token does not exist");
+            var user = await UserModel.findOne({ resetToken: token });
+            if (!user) {
+               return res
+                  .status(400)
+                  .send("User with this token does not exist");
+            }
+            if (newPassword != confirmNewPassword) {
+               return res.status(400).send("Password is not same");
+            }
+            const hashPassword = bcrypt.hashSync(newPassword, 10);
+            user.password = hashPassword;
+            user.status = "Active";
+            await UserModel.updateOne(
+               { _id: user._id },
+               { $unset: { resetToken: "" } }
+            );
+            user.save((err, result) => {
+               if (err) {
+                  return res.status(400).send("Reset Password Error");
+               } else {
+                  return res.status(200).send("Your password has been changed");
                }
-               if (newPassword != confirmNewPassword) {
-                  return res.status(400).send("Password is not same");
-               }
-               const hashPassword = bcrypt.hashSync(newPassword, 10);
-
-               user.password = hashPassword;
-               user.status = "Active";
-               user.save((err, result) => {
-                  if (err) {
-                     return res.status(400).send("Reset Password Error");
-                  } else {
-                     return res
-                        .status(200)
-                        .send("Your password has been changed");
-                  }
-               });
             });
          }
       );
