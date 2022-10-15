@@ -1,5 +1,7 @@
 const SchoolModel = require("../../../models/school");
+const UserModel = require("../../../models/user");
 const { cloudinary } = require("../../../utils/cloudinary");
+const notapprove_mail = require("../../../utils/notapprove_mail");
 
 const schoolEdit = async (req, res) => {
    const {
@@ -11,11 +13,14 @@ const schoolEdit = async (req, res) => {
    } = req.body;
 
    const school = await SchoolModel.findOne({
-         schoolID: req.body.schoolID
-   });
+      schoolID: req.body.schoolID,
+   }).exec();
 
-   if ( schoolName && ( ((req.userInfo.role == "admin") && school.status == "approve") 
-        || (req.userInfo.role == "host") ) ) {
+   if (
+      schoolName &&
+      ((req.userInfo.role == "admin" && school.status == "approve") ||
+         req.userInfo.role == "host")
+   ) {
       school.schoolName = schoolName;
    }
 
@@ -30,6 +35,20 @@ const schoolEdit = async (req, res) => {
    if (status && req.userInfo.role == "host") {
       const statusArray = ["approve", "pending", "not_approve"];
       if (statusArray.includes(status)) {
+         // if status == "not_approve" should send the email
+         if (status == "not_approve") {
+            if (!req.body.msg) {
+               return res
+                  .status(400)
+                  .send({ status: false, message: "You did't send msg." });
+            }
+            const admin = await UserModel.findOne({
+               role: "admin",
+               schoolID: req.body.schoolID,
+            }).exec();
+            // console.log("admin email ->>", admin.email);
+            notapprove_mail(admin.email, school.schoolName, req.body.msg);
+         }
          school.status = status;
       }
    }
@@ -53,8 +72,11 @@ const schoolEdit = async (req, res) => {
       }
    }
 
-   if ( urlLogo && ( ((req.userInfo.role == "admin") && school.status == "approve") 
-   || (req.userInfo.role == "host") ) ) {
+   if (
+      urlLogo &&
+      ((req.userInfo.role == "admin" && school.status == "approve") ||
+         req.userInfo.role == "host")
+   ) {
       try {
          const uploadLogo = await cloudinary.uploader.upload(urlLogo, {
             upload_preset: "urlLogo",
