@@ -33,7 +33,9 @@ const updatepassword = async (req, res) => {
                if (err) {
                   return res.status(400).send("Reset Password Error");
                } else {
-                  return res.status(200).send("Your password has been changed");
+                  return res
+                     .status(200)
+                     .json({ status: true, schoolID: user.schoolID });
                }
             });
          }
