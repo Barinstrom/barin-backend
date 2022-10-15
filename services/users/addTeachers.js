@@ -1,12 +1,15 @@
 const teacherModel = require("../../models/teacher");
 const userModel = require("../../models/user");
+const schoolModel = require("../../models/school");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { sender } = require("../../utils/mail");
 const { activate } = require("../../utils/activate");
 
 const addTeachers = async (req, res) => {
    let mergingTeacher = req.body; // array of object
+   const _school = await schoolModel
+      .findOne({ schoolID: req.userInfo.schoolID })
+      .exec();
    for (let i = 0; i < mergingTeacher.length; i++) {
       const { email, firstname, lastname, tel } = mergingTeacher[i];
       if ((!email, !firstname, !lastname)) {

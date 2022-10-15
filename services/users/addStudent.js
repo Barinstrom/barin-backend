@@ -1,7 +1,6 @@
 const userModel = require("../../models/user");
 const studentModel = require("../../models/student");
 const schoolModel = require("../../models/school");
-// const { sender } = require("../../utils/mail");
 const { activate } = require("../../utils/activate");
 const jwt = require("jsonwebtoken");
 const addStudent = async (req, res) => {

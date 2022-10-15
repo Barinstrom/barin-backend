@@ -1,7 +1,6 @@
 const teacherModel = require("../../models/teacher");
 const userModel = require("../../models/user");
 const schoolModel = require("../../models/school");
-// const { sender } = require("../../utils/mail");
 const { activate } = require("../../utils/activate");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");

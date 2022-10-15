@@ -1,12 +1,15 @@
 const studentModel = require("../../models/student");
 const userModel = require("../../models/user");
+const schoolModel = require("../../models/school");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { activate } = require("../../utils/activate");
-// const { sender } = require("../../utils/mail");
 
 const addStudents = async (req, res) => {
    let mergingStudent = req.body; // array of object
+   const _school = await schoolModel
+      .findOne({ schoolID: req.userInfo.schoolID })
+      .exec();
    for (let i = 0; i < mergingStudent.length; i++) {
       const {
          email,
@@ -144,7 +147,6 @@ const addStudents = async (req, res) => {
             new_user.schoolID,
             new_user.resetToken
          );
-         // sender(new_user.email, new_user.email, new_user.confirmationCode);
          new_student.push(new_user);
          //res.send({ success: true });
       }
