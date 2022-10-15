@@ -8,7 +8,7 @@ const getPendingSchool = (req, res) => {
    const query = {
       schoolID: { $regex: tmp, $options: "i" },
       status: "pending",
-      // paymentStatus:"success"
+      paymentStatus: "success",
    };
    const page = req.query.page || 1;
    const limit = 3;
