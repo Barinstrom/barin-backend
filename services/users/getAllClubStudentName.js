@@ -1,13 +1,12 @@
 const { default: mongoose } = require("mongoose");
 const logModel = require("../../models/registerLogs");
-const studentModel = require("../../models/student");
+const clubModel = require("../../models/club");
 
 const getClubStudentName = async (req, res) => {
    if (!req.query.clubID) {
       return res.status(400).json({ message: "You didn't send clubID" });
    }
    const clubID = req.query.clubID;
-
    let _docs = await logModel
       .aggregate([
          {
@@ -56,9 +55,17 @@ const getClubStudentName = async (req, res) => {
 
    let finalDocs = [];
    for (let i = 0; i < count; i++) {
+      let status = 'Studying';
+      for (let x of docs[i].student.clubs){
+         if(x.clubID.toString() == req.query.clubID){
+            status = x.status;
+         }
+      }
       const name = {
          firstname: docs[i].student.firstname,
          lastname: docs[i].student.lastname,
+         status: status,
+         classYear: docs[i].student.classYear
       };
       finalDocs.push(name);
    }
