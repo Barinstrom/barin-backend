@@ -4,7 +4,7 @@ const schoolModel = require("../../../models/school");
 const getApprovedSchool = (req, res) => {
    let tmp = "(?!^all$)(^.*$)";
    if (req.query.query)
-      tmp = new RegExp("(?!^all$)" + "(^" + req.query.query + "$)");
+      tmp = new RegExp("(?!^all$)" + "(" + req.query.query + ")");
    const query = {
       schoolID: { $regex: tmp, $options: "i" },
       status: "approve",
