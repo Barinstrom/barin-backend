@@ -19,6 +19,7 @@ const forgotpassword = async (req, res) => {
       if (reseted) {
          res.status(200).json({
             message: "Email has been sent,Please check your email.",
+            schoolID: _user.schoolID
          });
       } else {
          res.status(401).json({ message: "Can not edit database." });
