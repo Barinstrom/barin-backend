@@ -4,7 +4,7 @@ const studentModel = require('../../models/student');
 
 const getClubStudent = async (req, res) => {
     const page = req.query.page || 1;
-    const limit = 1;
+    const limit = 5;
     let tmp = ""
     if (req.query.query)
        tmp = new RegExp("^" + req.query.query );
@@ -45,7 +45,7 @@ const getClubStudent = async (req, res) => {
         date:1
         }}
     ])
-    .exec(); 
+    .exec();
 
     let docs = [];
     for(let i=0;i<_docs.length;i++){

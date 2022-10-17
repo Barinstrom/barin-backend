@@ -2,11 +2,11 @@ const userModel = require('../../models/user');
 
 const getSchoolTeacher = async (req, res) => {
     const page = req.query.page || 1;
-    const limit = 1;
+    const limit = 5;
     let tmp = ""
     if (req.query.query)
        tmp = new RegExp("^" + req.query.query );
-       
+
     let temp = await userModel
        .aggregate([
           {
@@ -37,7 +37,7 @@ const getSchoolTeacher = async (req, res) => {
             $count: "count"
           }
        ])
-       .exec(); 
+       .exec();
        /*[
             {
                 "count": 1
@@ -96,7 +96,7 @@ const getSchoolTeacher = async (req, res) => {
         $limit: limit
        }
     ])
-    .exec(); 
+    .exec();
 
     let docs = []
     for(let i=0;i<_docs.length;i++){
