@@ -11,7 +11,7 @@ const getApprovedSchool = (req, res) => {
       paymentStatus: "success",
    };
    const page = req.query.page || 1;
-   const limit = 3;
+   const limit = 1;
    const sort = "field -paymentDate";
 
    //{ color: "blue", published: true }, { page: 1, limit: 10, projection: { color: 1 } }
