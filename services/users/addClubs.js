@@ -37,7 +37,7 @@ const addClubs = async (req, res) => {
       payloadClub["schoolID"] = req.userInfo.schoolID;
       delete payloadClub["firstname"];
       delete payloadClub["lastname"];
-      payloadClub["schedule"] = ["13:00-13:50"]
+      payloadClub["schedule"] = ["วันจันทร์ 13:00-13:50"]
       payloadClub["urlPicture"] = "https://files.tawanchai.com/pic/rordor.png"
       if (req.body.urlPicture) {
          const uploadPic = await cloudinary.uploader.upload(
