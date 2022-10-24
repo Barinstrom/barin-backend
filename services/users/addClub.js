@@ -13,28 +13,27 @@ const addClub = async (req, res) => {
    )
       return res.status(400).send({ error: "Club name is already exists." });
 
-   //หา teacher เพื่อไป add clubID in teacher
-   const teacherFName = req.body.firstname;
-   const teacherLName = req.body.lastname;
-   teacher = await teacherModel.findOne({
-      firstname: teacherFName,
-      lastname: teacherLName,
-   });
-   if (!teacher)
-      return res.status(400).send({ error: "This teacher doesn't exist." });
-
    //เช็คว่าเป็น teacher ของโรงเรียนนี้หรือไม่
-   const _user = await userModel.findOne({ _id: teacher.userID });
+   const _user = await userModel.findOne({ email: req.body.teacherEmail });
+   if(_user.role != "teacher")
+      return res
+         .status(400)
+         .send({ error: "This user isn't teacher." });
    if (_user.schoolID != req.userInfo.schoolID)
       return res
          .status(400)
          .send({ error: "This teacher isn't at your school." });
 
+   
+   //หา teacher เพื่อไป add clubID in teacher
+   teacher = await teacherModel.findOne({ userID: _user._id });
+   if (!teacher)
+      return res.status(400).send({ error: "This teacher doesn't exist." });
+
+
    //เตรียม payloadClub
    const payloadClub = req.body;
    payloadClub["schoolID"] = req.userInfo.schoolID;
-   delete payloadClub["firstname"];
-   delete payloadClub["lastname"];
    if (req.body.urlPicture) {
       const uploadPic = await cloudinary.uploader.upload(req.body.urlPicture, {
          upload_preset: "urlPicture",
@@ -53,7 +52,7 @@ const addClub = async (req, res) => {
    const payloadTeacher = [...teacher.clubs, clubID];
    await teacherModel
       .updateOne(
-         { firstname: teacherFName, lastname: teacherLName },
+         { userID: _user._id },
          { $set: { clubs: payloadTeacher } }
       )
       .then(() => {
