@@ -9,9 +9,19 @@ const addClub = async (req, res) => {
       await clubModel.findOne({
          clubName: req.body.clubName,
          schoolID: req.userInfo.schoolID,
+         schoolYear: req.body.schoolYear,
       })
    )
-      return res.status(400).send({ error: "Club name is already exists." });
+      return res.status(400).send({ error: "Club name is already exists in this year." });
+
+   //check groupID
+   if (
+      await clubModel.findOne({
+         groupID: req.body.groupID,
+         schoolYear: req.body.schoolYear,
+      })
+   )
+      return res.status(400).send({ error: "GroupID is already exists in this year." });
 
    //เช็คว่าเป็น teacher ของโรงเรียนนี้หรือไม่
    const _user = await userModel.findOne({ email: req.body.teacherEmail });

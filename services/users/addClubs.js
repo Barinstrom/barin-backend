@@ -5,15 +5,25 @@ const { cloudinary } = require("../../utils/cloudinary");
 
 const addClubs = async (req, res) => {
    const clubs = req.body;
-   //check club name
    for (const club of clubs) {
+      //check club name
       if (
          await clubModel.findOne({
             clubName: club.clubName,
             schoolID: req.userInfo.schoolID,
+            schoolYear: club.schoolYear,
          })
       )
-         return res.status(400).send({ error: "Club name is already exists." });
+         return res.status(400).send({ error: "Club name is already exists in this year." });
+      
+      //check groupID
+      if (
+         await clubModel.findOne({
+            groupID: club.groupID,
+            schoolYear: club.schoolYear,
+         })
+      )
+         return res.status(400).send({ error: "GroupID is already exists in this year." });
 
       //เช็คว่าเป็น teacher ของโรงเรียนนี้หรือไม่
       const _user = await userModel.findOne({ email: club.teacherEmail });
