@@ -16,7 +16,7 @@ const addClubs = async (req, res) => {
          return res.status(400).send({ error: "Club name is already exists." });
 
       //เช็คว่าเป็น teacher ของโรงเรียนนี้หรือไม่
-      const _user = await userModel.findOne({ email: req.body.teacherEmail });
+      const _user = await userModel.findOne({ email: club.teacherEmail });
       if(_user.role != "teacher")
          return res
             .status(400)
@@ -37,12 +37,12 @@ const addClubs = async (req, res) => {
       payloadClub["schoolID"] = req.userInfo.schoolID;
       payloadClub["schedule"] = ["วันจันทร์ 13:00-13:50"]
       payloadClub["urlPicture"] = "https://files.tawanchai.com/pic/rordor.png"
-      if (req.body.urlPicture) {
+      if (club.urlPicture) {
          const uploadPic = await cloudinary.uploader.upload(
-            req.body.urlPicture,
+            club.urlPicture,
             {
                upload_preset: "urlPicture",
-               public_id: req.body.clubName + "_" + req.userInfo.schoolID,
+               public_id: club.clubName + "_" + req.userInfo.schoolID,
             }
          );
          const urlPicture = uploadPic.secure_url;
