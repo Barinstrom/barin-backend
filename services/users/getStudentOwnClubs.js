@@ -10,8 +10,9 @@ const getStudentOwnClubs = async (req, res) => {
    let clubsID = student.clubs;
    let clubs = [];
    for (let i = 0; i < clubsID.length; i++) {
-      if(clubsID[i].status == "Studying"){
+      if(clubsID[i].studyYear == req.query.schoolYear){
          const doc = await clubModel.findById(clubsID[i].clubID).lean();
+         doc["status"] = clubsID[i].status
          const teachers = await getTeachers(clubsID[i].clubID,req);
          clubs.push({...doc,teachers});
       }
