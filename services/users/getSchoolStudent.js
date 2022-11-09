@@ -35,10 +35,10 @@ const getSchoolStudent = async (req, res) => {
          },
          {
             $match: {
-               "student.firstname": {
-                  $regex: tmp,
-                  $options: 'i'
-               },
+               $or: [
+                  {"student.firstname" : {$regex: tmp ,$options:'i'},},
+                  {"student.lastname" : {$regex: tmp ,$options:'i'},},
+               ],
             },
          },
          {
@@ -101,10 +101,10 @@ const getSchoolStudent = async (req, res) => {
          },
          {
             $match: {
-               "student.firstname": {
-                  $regex: tmp,
-                  $options: 'i'
-               },
+               $or: [
+                  {"student.firstname" : {$regex: tmp ,$options:'i'},},
+                  {"student.lastname" : {$regex: tmp ,$options:'i'},},
+               ],
             },
          },
          {

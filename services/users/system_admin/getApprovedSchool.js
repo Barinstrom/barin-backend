@@ -2,11 +2,11 @@ const schoolModel = require("../../../models/school");
 //const { PaginationParameters } = require('mongoose-paginate-v2');
 
 const getApprovedSchool = (req, res) => {
-   let tmp = "(?!^all$)(^.*$)";
+   let tmp = "(^.*$)";
    if (req.query.query)
-      tmp = new RegExp("(?!^all$)" + "(" + req.query.query + ")");
+      tmp = new RegExp("(" + req.query.query + ")");
    const query = {
-      schoolID: {
+      schoolName: {
          $regex: tmp,
          $options: "i"
       },
