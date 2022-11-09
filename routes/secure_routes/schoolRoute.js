@@ -15,6 +15,7 @@ const getOwnReview = require("../../services/users/getOwnReview");
 const getStudentOwnClubs = require("../../services/users/getStudentOwnClubs");
 const getTeacherOwnClubs = require("../../services/users/getTeacherOwnClubs");
 const getStudentPastClubs = require("../../services/users/getStudentPastClubs");
+const getSchoolYear = require("../../services/users/getSchoolYearByGroupID");
 
 const editAdmin = require("../../services/users/system_admin/adminEdit");
 const getSchoolStudent = require("../../services/users/getSchoolStudent");
@@ -72,6 +73,11 @@ router.get(
    "/get-own-review",
    verifyRole("student"),
    getOwnReview
+);
+router.get(
+   "/get-schoolyear",
+   verifyRole("host", "admin", "teacher", "student"),
+   getSchoolYear
 );
 router.get(
    "/clubs",
