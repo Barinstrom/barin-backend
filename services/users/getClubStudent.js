@@ -38,7 +38,10 @@ const getClubStudent = async (req, res) => {
        { $unwind: "$student" },
        {
           $match: {
-             "student.firstname" : {$regex: tmp ,$options:'i'},
+            $or: [
+                {"student.firstname" : {$regex: tmp ,$options:'i'},},
+                {"student.lastname" : {$regex: tmp ,$options:'i'},},
+             ],
           },
        },
        { $sort: {

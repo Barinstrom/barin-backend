@@ -41,6 +41,10 @@ const ClubSchema = new Schema({
    //    pictureID: Number,
    //    urlPicture: String,
    // },
+   teacherEmail: {
+      type: String,
+      required: true,
+   },
    urlPicture: String,
 });
 
