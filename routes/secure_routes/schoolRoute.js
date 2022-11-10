@@ -34,6 +34,7 @@ const updateTeacher = require("../../services/users/updateTeacher");
 const updateStudyStatus = require("../../services/users/updateStudyStatus");
 const updateClub = require("../../services/users/updateClub");
 const deleteClubs = require("../../services/users/deleteClubs");
+const deleteReview = require("../../services/users/deleteReview");
 const setSchedule = require("../../services/users/setSchedule");
 const getClubStudentName = require("../../services/users/getAllClubStudentName");
 const getSatisfyCount = require("../../services/users/getSatisfyCount");
@@ -124,6 +125,7 @@ router.patch(
 router.patch("/update-study-status", verifyRole("host", "admin", "teacher"), updateStudyStatus);
 
 router.delete("/delete-clubs", verifyRole("host", "admin"), deleteClubs);
+router.delete("/delete-review", verifyRole("host"), deleteReview);
 router.patch("/set-schedule", verifyRole("host", "admin"), setSchedule);
 router.get("/getTeacherName", verifyRole("host", "admin", "teacher", "student"), getTeacherName);
 
