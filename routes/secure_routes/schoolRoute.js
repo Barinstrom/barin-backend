@@ -125,7 +125,7 @@ router.patch(
 router.patch("/update-study-status", verifyRole("host", "admin", "teacher"), updateStudyStatus);
 
 router.delete("/delete-clubs", verifyRole("host", "admin"), deleteClubs);
-router.delete("/delete-review", verifyRole("host"), deleteReview);
+router.delete("/delete-review", verifyRole("host", "admin"), deleteReview);
 router.patch("/set-schedule", verifyRole("host", "admin"), setSchedule);
 router.get("/getTeacherName", verifyRole("host", "admin", "teacher", "student"), getTeacherName);
 
