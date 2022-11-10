@@ -38,7 +38,16 @@ const getSatisfyCount = async (req, res) => {
    }
    result[0].percent = (100 * result[0].count) / total;
    result[1].percent = (100 * result[1].count) / total;
-   res.send(result);
+   let ans = []
+   if(result[0]._id=='พอใจ'){
+      ans.push(result[0]);
+      ans.push(result[1]);
+   }
+   else{
+      ans.push(result[1]);
+      ans.push(result[0]);
+   }
+   res.send(ans);
 };
 
 module.exports = getSatisfyCount;
