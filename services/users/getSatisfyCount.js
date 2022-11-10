@@ -33,18 +33,28 @@ const getSatisfyCount = async (req, res) => {
          },
       ]);
    let total = 0;
+   let ans = [];
+   if(!result){
+      return res.status(404).send('no review was found');
+   }
+
    for (const x of result) {
       total = total + x.count;
    }
    result[0].percent = (100 * result[0].count) / total;
-   result[1].percent = (100 * result[1].count) / total;
-   let ans = []
+   if(result.length>1){
+      result[1].percent = (100 * result[1].count) / total;
+   }
    if(result[0]._id=='พอใจ'){
       ans.push(result[0]);
-      ans.push(result[1]);
+      if(result.length>1){
+         ans.push(result[1]);
+      }
    }
    else{
-      ans.push(result[1]);
+      if(result.length>1){
+         ans.push(result[1]);
+      }
       ans.push(result[0]);
    }
    res.send(ans);
