@@ -13,9 +13,9 @@ const getReviews = async (req, res) => {
     
 
     //query สำหรับ paginate
-    const query = { groupID: tmpClub.groupID, schoolYear: req.query.schoolYear, studentID:{$ne: new mongoose.mongo.ObjectId(req.userInfo._id)}};
+    const query = { groupID: tmpClub.groupID, schoolYear: req.query.schoolYear};
     const page = req.query.page || 1;
-    const limit = 3;
+    const limit = 5;
 
     //paginate
     reviewModel
