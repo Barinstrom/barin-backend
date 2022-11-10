@@ -34,7 +34,8 @@ const getSatisfyCount = async (req, res) => {
       ]);
    let total = 0;
    let ans = [];
-   if(!result){
+   //console.log(result);
+   if(result.length == 0){
       return res.status(404).send('no review was found');
    }
 
