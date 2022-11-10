@@ -42,9 +42,9 @@ const getSatisfyCount = async (req, res) => {
    for (const x of result) {
       total = total + x.count;
    }
-   result[0].percent = (100 * result[0].count) / total;
+   result[0].percent = Math.round((100 * result[0].count) / total);
    if(result.length>1){
-      result[1].percent = (100 * result[1].count) / total;
+      result[1].percent = Math.round((100 * result[1].count) / total);
    }
    if(result[0]._id=='พอใจ'){
       ans.push(result[0]);
