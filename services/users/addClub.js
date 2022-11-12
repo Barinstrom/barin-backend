@@ -1,7 +1,9 @@
 const clubModel = require("../../models/club");
 const teacherModel = require("../../models/teacher");
 const userModel = require("../../models/user");
-const { cloudinary } = require("../../utils/cloudinary");
+const {
+   cloudinary
+} = require("../../utils/cloudinary");
 
 const addClub = async (req, res) => {
    //check club name
@@ -12,7 +14,9 @@ const addClub = async (req, res) => {
          schoolYear: req.body.schoolYear,
       })
    )
-      return res.status(400).send({ error: "Club name is already exists in this year." });
+      return res.status(400).send({
+         error: "Club name is already exists in this year."
+      });
 
    //check groupID
    if (
@@ -21,24 +25,41 @@ const addClub = async (req, res) => {
          schoolYear: req.body.schoolYear,
       })
    )
-      return res.status(400).send({ error: "GroupID is already exists in this year." });
+      return res.status(400).send({
+         error: "GroupID is already exists in this year."
+      });
 
    //เช็คว่าเป็น teacher ของโรงเรียนนี้หรือไม่
-   const _user = await userModel.findOne({ email: req.body.teacherEmail });
-   if(_user.role != "teacher")
+   const _user = await userModel.findOne({
+      email: req.body.teacherEmail
+   });
+   if (!_user)(
+      return res.status(400).send({
+         error: "This user doesn't exist."
+      });
+   )
+   if (_user.role != "teacher")
       return res
          .status(400)
-         .send({ error: "This user isn't teacher." });
+         .send({
+            error: "This user isn't teacher."
+         });
    if (_user.schoolID != req.userInfo.schoolID)
       return res
          .status(400)
-         .send({ error: "This teacher isn't at your school." });
+         .send({
+            error: "This teacher isn't at your school."
+         });
 
-   
+
    //หา teacher เพื่อไป add clubID in teacher
-   teacher = await teacherModel.findOne({ userID: _user._id });
+   teacher = await teacherModel.findOne({
+      userID: _user._id
+   });
    if (!teacher)
-      return res.status(400).send({ error: "This teacher doesn't exist." });
+      return res.status(400).send({
+         error: "This teacher doesn't exist."
+      });
 
 
    //เตรียม payloadClub
@@ -61,12 +82,17 @@ const addClub = async (req, res) => {
    // add clubID in teacher
    const payloadTeacher = [...teacher.clubs, clubID];
    await teacherModel
-      .updateOne(
-         { userID: _user._id },
-         { $set: { clubs: payloadTeacher } }
-      )
+      .updateOne({
+         userID: _user._id
+      }, {
+         $set: {
+            clubs: payloadTeacher
+         }
+      })
       .then(() => {
-         res.send({ success: true });
+         res.send({
+            success: true
+         });
       })
       .catch((err) => {
          res.status(400).send(err);
