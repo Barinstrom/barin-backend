@@ -14,7 +14,7 @@ const getSchoolClubs = async (req, res) => {
       schoolYear: _school.nowSchoolYear,
    };
    const page = req.query.page || 1;
-   const limit = 3;
+   const limit = 10;
 
    //{ color: "blue", published: true }, { page: 1, limit: 10, projection: { color: 1 } }
    let _clubs = await clubModel.paginate(query, { page, limit });
