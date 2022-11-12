@@ -1,7 +1,9 @@
 const clubModel = require("../../models/club");
 const teacherModel = require("../../models/teacher");
 const userModel = require("../../models/user");
-const { cloudinary } = require("../../utils/cloudinary");
+const {
+   cloudinary
+} = require("../../utils/cloudinary");
 
 const addClubs = async (req, res) => {
    const clubs = req.body;
@@ -14,8 +16,10 @@ const addClubs = async (req, res) => {
             schoolYear: club.schoolYear,
          })
       )
-         return res.status(400).send({ error: "Club name is already exists in this year." });
-      
+         return res.status(400).send({
+            error: "Club name is already exists in this year."
+         });
+
       //check groupID
       if (
          await clubModel.findOne({
@@ -23,24 +27,41 @@ const addClubs = async (req, res) => {
             schoolYear: club.schoolYear,
          })
       )
-         return res.status(400).send({ error: "GroupID is already exists in this year." });
+         return res.status(400).send({
+            error: "GroupID is already exists in this year."
+         });
 
       //เช็คว่าเป็น teacher ของโรงเรียนนี้หรือไม่
-      const _user = await userModel.findOne({ email: club.teacherEmail });
-      if(_user.role != "teacher")
+      const _user = await userModel.findOne({
+         email: club.teacherEmail
+      });
+      if (!_user) {
+         return res.status(400).send({
+            error: "This user doesn't exist."
+         });
+      }
+      if (_user.role != "teacher")
          return res
             .status(400)
-            .send({ error: "This user isn't teacher." });
+            .send({
+               error: "This user isn't teacher."
+            });
       if (_user.schoolID != req.userInfo.schoolID)
          return res
             .status(400)
-            .send({ error: "This teacher isn't at your school." });
+            .send({
+               error: "This teacher isn't at your school."
+            });
 
-      
+
       //หา teacher เพื่อไป add clubID in teacher
-      teacher = await teacherModel.findOne({ userID: _user._id });
+      teacher = await teacherModel.findOne({
+         userID: _user._id
+      });
       if (!teacher)
-         return res.status(400).send({ error: "This teacher doesn't exist." });
+         return res.status(400).send({
+            error: "This teacher doesn't exist."
+         });
 
       //เตรียม payloadClub
       const payloadClub = club;
@@ -49,8 +70,7 @@ const addClubs = async (req, res) => {
       payloadClub["urlPicture"] = "https://files.tawanchai.com/pic/rordor.png"
       if (club.urlPicture) {
          const uploadPic = await cloudinary.uploader.upload(
-            club.urlPicture,
-            {
+            club.urlPicture, {
                upload_preset: "urlPicture",
                public_id: club.clubName + "_" + req.userInfo.schoolID,
             }
@@ -58,7 +78,7 @@ const addClubs = async (req, res) => {
          const urlPicture = uploadPic.secure_url;
          payloadClub["urlPicture"] = urlPicture;
       }
-   
+
 
       //add new club
       const newClub = await clubModel.create(payloadClub);
@@ -67,15 +87,20 @@ const addClubs = async (req, res) => {
       // add clubID in teacher
       const payloadTeacher = [...teacher.clubs, clubID];
       await teacherModel
-         .updateOne(
-            { userID: _user._id },
-            { $set: { clubs: payloadTeacher } }
-         )
+         .updateOne({
+            userID: _user._id
+         }, {
+            $set: {
+               clubs: payloadTeacher
+            }
+         })
          .catch((err) => {
             return res.status(400).send(err);
          });
    }
-   res.send({ success: true });
+   res.send({
+      success: true
+   });
 };
 
 module.exports = addClubs;

@@ -33,11 +33,11 @@ const addClub = async (req, res) => {
    const _user = await userModel.findOne({
       email: req.body.teacherEmail
    });
-   if (!_user)(
+   if (!_user) {
       return res.status(400).send({
          error: "This user doesn't exist."
       });
-   )
+   }
    if (_user.role != "teacher")
       return res
          .status(400)
